@@ -30,7 +30,7 @@ englishGrammar = CFG.fromstring(
         Noun -> book | flight | meal | money
         Verb -> book | include | prefer
         Pronoun -> I | she | me
-        Proper-Noun -> Huston | NWA
+        Proper-Noun -> huston | nWA
         Aux -> does
         Preposition -> from | to | on | near | through
 """
@@ -40,4 +40,4 @@ string = "book the flight through Huston"
 
 print(englishGrammar.productions())
 
-CKY.parse(string, englishGrammar)
+print(CKY.parse(string, englishGrammar))
