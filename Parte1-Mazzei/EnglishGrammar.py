@@ -1,7 +1,9 @@
 from nltk import CFG
+import CKY
 
-englishGrammar = CFG.fromstring("""
 
+englishGrammar = CFG.fromstring(
+    """
         S -> NP VP
         S -> VP
         S -> X1 VP
@@ -24,7 +26,6 @@ englishGrammar = CFG.fromstring("""
         VP -> VP PP
         X2 -> Verb NP
         PP -> Preposition NP
-
         Det -> that | this | the | a
         Noun -> book | flight | meal | money
         Verb -> book | include | prefer
@@ -32,7 +33,11 @@ englishGrammar = CFG.fromstring("""
         Proper-Noun -> Huston | NWA
         Aux -> does
         Preposition -> from | to | on | near | through
+"""
+)
 
-""")
+string = "book the flight through Huston"
 
 print(englishGrammar.productions())
+
+CKY.parse(string, englishGrammar)
