@@ -19,25 +19,25 @@ def parse(string, grammar):
             ruleNode = Node(head)
             wordNode.addParent(ruleNode)
             table[j][j + 1] = table[j][j + 1] | set([ruleNode])
-            rightSons.append(head)
+            rightSons.append(ruleNode)
 
         for i in range(j - 1, -1, -1):
             # we go up the column we have currently updated
             for k in range(i + 1, 0, -1):
-                for node in table[i][k]:
-                    leftSon = node.name
+                for leftSon in table[i][k]:
                     # generate the couples
                     for rightSon in rightSons:
                         # find a rule that goes X -> leftSon rightSon
                         possibleParents = getMatchingRulesRHS(
-                            grammar, leftSon, rightSon
+                            grammar, leftSon.name, rightSon.name
                         )
                         for matchingRule in possibleParents:
                             parentNode = Node(lhs(matchingRule))
-                            ruleNode.addParent(parentNode)
-                            node.addParent(parentNode)
+                            rightSon.addParent(parentNode)
+                            leftSon.addParent(parentNode)
                             table[i][j + 1] = table[i][j + 1] | set([parentNode])
                             print("added a production head")
+    parentNode.printTreeString()
     return table
 
 
