@@ -1,4 +1,4 @@
-from anytree import Node, RenderTree
+from GraphNode import Node
 
 
 def parse(string, grammar):
@@ -13,26 +13,31 @@ def parse(string, grammar):
         word = cleanWord(word)
         wordNode = Node(word)
 
+        rightSons = []
         for rule in getMatchingRulesRHS(grammar, word):
-            ruleNode = Node(lhs(rule))
-            wordNode.parent = ruleNode
+            head = lhs(rule)
+            ruleNode = Node(head)
+            wordNode.addParent(ruleNode)
             table[j][j + 1] = table[j][j + 1] | set([ruleNode])
-            ruleValue = ruleNode.name
+            rightSons.append(head)
 
         for i in range(j - 1, -1, -1):
             # we go up the column we have currently updated
             for k in range(i + 1, 0, -1):
                 for node in table[i][k]:
-                    nodeValue = node.name
-                    # find a rule that goes X -> nodeValue ruleValue
-                    for matchingRule in getMatchingRulesRHS(
-                        grammar, nodeValue, ruleValue
-                    ):
-                        parentNode = Node(lhs(matchingRule))
-                        ruleNode.parent = parentNode
-                        node.parent = parentNode
-                        table[i][j + 1] = table[i][j + 1] | set([parentNode])
-        print()
+                    leftSon = node.name
+                    # generate the couples
+                    for rightSon in rightSons:
+                        # find a rule that goes X -> leftSon rightSon
+                        possibleParents = getMatchingRulesRHS(
+                            grammar, leftSon, rightSon
+                        )
+                        for matchingRule in possibleParents:
+                            parentNode = Node(lhs(matchingRule))
+                            ruleNode.addParent(parentNode)
+                            node.addParent(parentNode)
+                            table[i][j + 1] = table[i][j + 1] | set([parentNode])
+                            print("added a production head")
     return table
 
 
@@ -60,7 +65,6 @@ def getSetMatrix(rows, cols):
 
 def cleanWord(word):
     word = word.strip()
-    word = word.lower()
     return word
 
 

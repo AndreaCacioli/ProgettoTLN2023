@@ -1,6 +1,27 @@
 from nltk import CFG
 import CKY
 
+dummyGrammar = CFG.fromstring(
+    """
+        S -> NP VP
+        NP -> I | she | me
+        NP -> Huston | NWA
+        NP -> Det Nominal
+        Nominal -> book | flight | meal | money
+        Nominal -> Nominal PP
+        VP -> book | include | prefer
+        VP -> Verb NP
+        VP -> Verb PP
+        VP -> VP PP
+        PP -> Preposition NP
+        Det -> that | this | the | a
+        Noun -> book | flight | meal | money
+        Verb -> book | include | prefer
+        Pronoun -> I | she | me
+        Proper-Noun -> Huston | NWA
+        Preposition -> from | to | on | near | through
+"""
+)
 
 englishGrammar = CFG.fromstring(
     """
@@ -34,11 +55,11 @@ englishGrammar = CFG.fromstring(
 """
 )
 
-string = "prefer the flight through Huston"
+string = "I prefer the money"
 
-print(englishGrammar.productions())
+print(dummyGrammar.productions())
 
-table = CKY.parse(string, englishGrammar)
+table = CKY.parse(string, dummyGrammar)
 
 for i in range(len(table)):
     print()
