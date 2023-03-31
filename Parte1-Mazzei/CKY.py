@@ -1,29 +1,33 @@
 from GraphNode import Node
 
+def fillInDiagonal(grammar, word, wordNode, table, j):
+    rightSons = []
+    for rule in getMatchingRulesRHS(grammar, word):
+        head = lhs(rule)
+        ruleNode = Node(head)
+        wordNode.addParent(ruleNode)
+        table[j][j + 1] = table[j][j + 1] | set([ruleNode])
+        rightSons.append(ruleNode)
+    return rightSons
 
 def parse(string, grammar):
     print("\n\tProcessing the string: \t" + string)
-    print("\n")
     words = string.split()
     n = len(words)
 
     table = getSetMatrix(n, n + 1)
+
     for j in range(0, n):
         word = words[j]
         word = cleanWord(word)
         wordNode = Node(word)
 
-        rightSons = []
-        for rule in getMatchingRulesRHS(grammar, word):
-            head = lhs(rule)
-            ruleNode = Node(head)
-            wordNode.addParent(ruleNode)
-            table[j][j + 1] = table[j][j + 1] | set([ruleNode])
-            rightSons.append(ruleNode)
-
+        rightSons = fillInDiagonal(grammar, word, wordNode, table, j)
         for i in range(j - 1, -1, -1):
             # we go up the column we have currently updated
-            for k in range(i + 1, 0, -1):
+            rightSons = table[i+1][j+1]
+            for k in range(1, j+1):
+                LEFTSET = table[i][k]
                 for leftSon in table[i][k]:
                     # generate the couples
                     for rightSon in rightSons:
@@ -37,7 +41,6 @@ def parse(string, grammar):
                             leftSon.addParent(parentNode)
                             table[i][j + 1] = table[i][j + 1] | set([parentNode])
                             print("added a production head")
-    parentNode.printTreeString()
     return table
 
 

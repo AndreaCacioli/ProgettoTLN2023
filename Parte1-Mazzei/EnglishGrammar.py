@@ -67,4 +67,14 @@ for i in range(len(table)):
         print(f"\t {table[i][j]} \t\t\t", end="")
 
 
+for i in range(len(table)):
+    for j in range(1, len(table) + 1):
+        for node in list(table[i][j]):
+            if node == 'done':
+                continue
+            if len(node.parents) == 0:
+                node.printTreeString()
+                print()
+
+
 print()
