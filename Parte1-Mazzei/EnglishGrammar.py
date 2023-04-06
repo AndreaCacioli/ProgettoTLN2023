@@ -1,84 +1,59 @@
 from nltk import CFG
 import CKY
 
-dummyGrammar = CFG.fromstring(
+grammar = CFG.fromstring(
     """
         S -> NP VP
         S -> X1 VP
         X1 -> Aux NP
         Aux -> does | do
-        NP -> I | she | me
+        NP -> I | she | me | you
         NP -> Huston | NWA
         NP -> Det Nominal
-        Nominal -> morning
+        NP -> Det Noun
+        Nominal -> morning | quick | cool | adventurous | mountain | cold
         Nominal -> Nominal Noun
         Nominal -> Nominal PP
-        VP -> book | include | prefer
+        Nominal -> X3 Nominal
+        X3 -> X3 Nominal
+        X3 -> morning | quick | cool | adventurous | mountain
+        VP -> book | include | prefer | love | like | drink
+        VP -> Verb Nominal
         VP -> Verb NP
         VP -> Verb PP
-        VP -> VP PP
-        PP -> Preposition NP
-        Det -> that | this | the | a
-        Noun -> book | flight | meal | money
-        Verb -> book | include | prefer
-        Pronoun -> I | she | me
-        Proper-Noun -> Huston | NWA
-        Preposition -> from | to | on | near | through
-"""
-)
-
-englishGrammar = CFG.fromstring(
-    """
-        S -> NP VP
-        S -> X1 VP
-        X1 -> Aux NP
-        S -> book | include | prefer | is | prefer | like | need | want | fly | do
-        S -> Verb NP
-        S -> X2 PP
-        S -> Verb PP
-        S -> VP PP
-        NP -> book | flight | meal | money | flights | breeze | trip | morning
-        NP -> Huston 
-        NP -> Det Nominal
-        Nominal -> morning
-        Nominal -> Nominal Noun
-        Nominal -> Nominal PP
-        VP -> book | include | prefer | is | prefer | like | need | want | fly | do
-        VP -> Verb NP
         VP -> X2 PP
         X2 -> Verb NP
-        VP -> Verb PP
         VP -> VP PP
+        VP -> Adverb VP
         PP -> Preposition NP
-
-        Det -> that | this | the | a | an | these
-        Noun -> book | flight | meal | money | flights | breeze | trip | morning
-        Verb -> book | include | prefer | is | prefer | like | need | want | fly | do
-        Adjective -> cheapest | non-stop | first | latest | other | direct
-        Pronoun -> I | she | me | you | it
-        Proper-Noun -> Huston | NWA | Alaska | Baltimore | Los Angeles | Chicago | United | American
-        Aux -> does
-        Preposition -> from | to | on | near | through | in
+        Det -> that | this | the | a
+        Noun -> book | flight | meal | money | day | water
+        Verb -> book | include | prefer | love | like | drink
+        Pronoun -> I | she | me | you
+        Proper-Noun -> Huston | NWA
+        Preposition -> from | to | on | near | through
+        Adverb -> Adv1 Adv2
+        Adverb -> definitely | often | never | really | rarely
+        Adv1 -> never | rarely
+        Adv2 -> ever 
 """
 )
 
-string = "book the flight through Huston"
-string = "does she prefer a morning flight"
 
-table = CKY.parse(string, dummyGrammar)
+strings = []
+strings.append("I prefer the money")
+strings.append("I book the flight")
+strings.append("I book the flight through Huston")
+strings.append("does she prefer a morning flight")
+strings.append("I love a quick meal")
+strings.append("do you like a cool adventurous mountain day")
+strings.append("I really love that book")
+strings.append("you definitely prefer Huston")
+strings.append("you rarely ever drink cold water")
 
-for node in table[0][len(table)]:
-    if node.name == "S" and node.getString() == string:
-        node.printTreeString()
-        print()
-
-# for i in range(len(table)):
-#     for j in range(1, len(table) + 1):
-#         for node in list(table[i][j]):
-#             if node == "done":
-#                 continue
-#             if len(node.parents) == 0:
-#                 node.printTreeString()
-#                 print()
-
-print()
+for string in strings:
+    table = CKY.parse(string, grammar)
+    for node in table[0][len(table)]:
+        if node.name == "S" and node.getString() == string:
+            node.printTreeString()
+            print()
