@@ -68,7 +68,7 @@ string = "does she prefer a morning flight"
 table = CKY.parse(string, dummyGrammar)
 
 for node in table[0][len(table)]:
-    if node.name == 'S':
+    if node.name == "S" and node.getString() == string:
         node.printTreeString()
         print()
 

@@ -26,4 +26,3 @@ for sentence in sentences:
     for node in table[0][len(table)]:
         node.printTreeString()
         print()
-

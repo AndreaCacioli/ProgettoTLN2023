@@ -34,3 +34,21 @@ class Node:
 
     def printTreeString(self):
         self._printTreeString(1)
+
+    def getStringRec(self):
+        if len(self.children) == 0:
+            return self.name
+        else:
+            s = ""
+            for child in self.children:
+                s = child.getString() + " " + s
+            return s
+
+    def getString(self):
+        s = self.getStringRec()
+        words = s.split()
+        s = ""
+        for word in words:
+            word = word.strip()
+            s += word + " "
+        return s.strip()

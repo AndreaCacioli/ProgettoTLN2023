@@ -1,5 +1,6 @@
 from GraphNode import Node
 
+
 def fillInDiagonal(grammar, word, wordNode, table, j):
     rightSons = []
     for rule in getMatchingRulesRHS(grammar, word):
@@ -26,19 +27,22 @@ def parse(string, grammar):
         rightSons = fillInDiagonal(grammar, word, wordNode, table, j)
         for i in range(j - 1, -1, -1):
             # we go up the column we have currently updated
-            for l in range(n-1, i, -1):
+            for l in range(n - 1, i, -1):
                 rightSons = table[l][j + 1]
                 for k in range(1, j + 1):
                     for leftSon in table[i][k]:
                         # generate the couples
                         for rightSon in rightSons:
                             # find a rule that goes X -> leftSon rightSon
-                            possibleParents = getMatchingRulesRHS(grammar, leftSon.name, rightSon.name)
+                            possibleParents = getMatchingRulesRHS(
+                                grammar, leftSon.name, rightSon.name
+                            )
                             for matchingRule in possibleParents:
                                 connected = True
-                                createAndAddNewNode(matchingRule, table, i , j, rightSon, leftSon)
+                                createAndAddNewNode(
+                                    matchingRule, table, i, j, rightSon, leftSon
+                                )
     return table
-
 
 
 def createAndAddNewNode(matchingRule, table, i, j, rightSon, leftSon):
@@ -46,6 +50,7 @@ def createAndAddNewNode(matchingRule, table, i, j, rightSon, leftSon):
     rightSon.addParent(parentNode)
     leftSon.addParent(parentNode)
     table[i][j + 1] = table[i][j + 1] | set([parentNode])
+
 
 def getMatchingRulesRHS(grammar, word1, word2=None):
     ret = []
