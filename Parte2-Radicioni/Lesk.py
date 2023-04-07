@@ -6,11 +6,11 @@ def simplifiedLesk(word, context):
     for synset in wordnet.synsets(word):
         definition = synset.definition()
         examples = synset.examples()
-        bagOfWord = getBagOfWords(definition, examples)
-        print(definition)
-        print(examples)
-        print(bagOfWord)
-        print()
+        bagOfWords = getBagOfWords(definition, examples)
+        contextSet = set(context)
+        if len(contextSet.intersection(bagOfWords)) > maxOverlap:
+            bestSense = synset
+    return bestSense
 
 
 def getBagOfWords(definition, examples):
