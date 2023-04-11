@@ -8,7 +8,7 @@
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
-            "program": "./Parte2-Radicioni/WuPalmerTest.py",
+            "program": "./Parte2-Radicioni/distance.py",
             "console": "integratedTerminal",
             "justMyCode": true
         }
