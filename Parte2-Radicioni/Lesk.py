@@ -4,7 +4,8 @@ from nltk.corpus import wordnet
 def simplifiedLesk(word, context):
     maxOverlap = 0
     bestSense = None
-    for synset in wordnet.synsets(word, wordnet.NOUN):
+    synsets = wordnet.synsets(word, wordnet.NOUN)
+    for synset in synsets:
         definition = synset.definition()
         examples = synset.examples()
         bagOfWords = getBagOfWords(definition, examples)
@@ -12,7 +13,7 @@ def simplifiedLesk(word, context):
         if len(contextSet.intersection(bagOfWords)) > maxOverlap:
             bestSense = synset
     if bestSense is None:
-        bestSense = wordnet.synset(f'{word}.n.01')
+        bestSense = synsets[0]
     return bestSense
 
 
