@@ -4,7 +4,7 @@ from nltk.corpus import wordnet
 def simplifiedLesk(word, context):
     maxOverlap = 0
     bestSense = None
-    for synset in wordnet.synsets(word):
+    for synset in wordnet.synsets(word, wordnet.NOUN):
         definition = synset.definition()
         examples = synset.examples()
         bagOfWords = getBagOfWords(definition, examples)
@@ -25,9 +25,10 @@ def getBagOfWords(definition, examples):
     return bag
 
 def clean(bag):
-    for word in bag:
+    temp = list(bag)
+    for word in temp:
         if '(' in word or ')' in word:
-            bag.remove(word)
             word = word.replace('(', '')
             word = word.replace(')', '')
-            bag.add(word)
+            word = word.strip()
+    bag = set(temp)

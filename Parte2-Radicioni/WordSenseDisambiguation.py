@@ -3,7 +3,6 @@ from Lesk import simplifiedLesk
 from termcolor import colored, cprint
 from nltk.corpus import wordnet
 
-entries = parse("./Parte2-Radicioni/WordSim353.csv")
 
 word1 = "bank"
 word2 = "river"
