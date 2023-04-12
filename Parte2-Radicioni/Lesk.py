@@ -25,11 +25,12 @@ def getBagOfWords(definition, examples):
     clean(bag)
     return bag
 
+
 def clean(bag):
     temp = list(bag)
     for word in temp:
-        if '(' in word or ')' in word:
-            word = word.replace('(', '')
-            word = word.replace(')', '')
+        if "(" in word or ")" in word:
+            word = word.replace("(", "")
+            word = word.replace(")", "")
             word = word.strip()
     bag = set(temp)

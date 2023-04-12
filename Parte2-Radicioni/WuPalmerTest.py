@@ -14,15 +14,17 @@ for entry in entries:
         sense1 = simplifiedLesk(entry[0], entry[1])
         sense2 = simplifiedLesk(entry[1], entry[0])
     except:
-        print(f'Skipping words {entry[0]}, {entry[1]} because they are not considered nouns')
+        print(
+            f"Skipping words {entry[0]}, {entry[1]} because they are not considered nouns"
+        )
         continue
-    print(f'Working on ', end = '')
-    cprint(f'{entry[0]}','red', end = '')
-    print(f', ', end = '')
-    cprint(f'{entry[1]}','red', end = '')
+    print(f"Working on ", end="")
+    cprint(f"{entry[0]}", "red", end="")
+    print(f", ", end="")
+    cprint(f"{entry[1]}", "red", end="")
     print()
     wu = WuPalmerSimilarity(sense1, sense2)
-    cprint(f'Wu & Palmer Similarity index is {wu}','green')
+    cprint(f"Wu & Palmer Similarity index is {wu}", "green")
     var1.append(entry[2])
     var2.append(wu)
 
@@ -36,4 +38,3 @@ cprint("\t\tSPEARMAN CORRELATION", "magenta")
 res = stats.spearmanr(var1, var2)
 print(res)
 print()
-    

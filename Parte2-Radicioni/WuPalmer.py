@@ -3,9 +3,9 @@
 #
 # f(s1, s2) = ( 2 * depth(LCS) ) / ( depth(s1) + depth(s2) )
 # s1 and s2 are the two senses we are analysing
-# LCS is the Lowest Common Subsumer - The first sense we encounter when going "up" (hypernymy) the 
+# LCS is the Lowest Common Subsumer - The first sense we encounter when going "up" (hypernymy) the
 #   tree
-# The depth is the "distance" in terms of steps required to reach a sense starting from the sense 
+# The depth is the "distance" in terms of steps required to reach a sense starting from the sense
 #   of the word 'entity'
 #
 ############################################################################################################
@@ -15,10 +15,11 @@ from Lesk import simplifiedLesk
 
 
 def WuPalmerSimilarity(sense1, sense2):
-    return (2 *  depth(LCS(sense1, sense2))) / (depth(sense1) + depth(sense2))
+    return (2 * depth(LCS(sense1, sense2))) / (depth(sense1) + depth(sense2))
+
 
 def depth(sense):
-    root = wordnet.synset('entity.n.01')
+    root = wordnet.synset("entity.n.01")
     if sense == root:
         return 1
     i = 1
@@ -39,6 +40,7 @@ def LCS(sense1, sense2):
         set1 = expand(set1)
         set2 = expand(set2)
     return list(set1.intersection(set2))[0]
+
 
 def expand(toBeExpanded):
     for sense in toBeExpanded:
