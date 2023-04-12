@@ -1,13 +1,14 @@
 from nltk.corpus import wordnet
 from Lesk import simplifiedLesk
 
+def index(sense1, sense2):
+    return 2 * 16 - len(bfs(sense1, sense2))
 
 def bfs(start, goal):
     addedBy = {}
     visited = set([])
     queue = [start]
     while len(queue) > 0:
-        print(f"length is now {len(queue)}")
         current = queue.pop(0)
         if current == goal:
             return getPath(addedBy, start, goal)
@@ -38,20 +39,20 @@ def getNeighbours(sense):
     return neighbours
 
 
-start = simplifiedLesk("thing", "")
-end = simplifiedLesk("entity", "")
+# start = simplifiedLesk("thing", "")
+# end = simplifiedLesk("entity", "")
 
-print(bfs(start, end))
-input("Press Enter to continue...")
+# print(bfs(start, end))
+# input("Press Enter to continue...")
 
-start = simplifiedLesk("rust", "")
-end = simplifiedLesk("car", "")
+# start = simplifiedLesk("rust", "")
+# end = simplifiedLesk("car", "")
 
-print(bfs(start, end))
-input("Press Enter to continue...")
+# print(bfs(start, end))
+# input("Press Enter to continue...")
 
-start = simplifiedLesk("program", "")
-end = simplifiedLesk("Jerusalem", "")
+# start = simplifiedLesk("program", "")
+# end = simplifiedLesk("Jerusalem", "")
 
-print(bfs(start, end))
-input("Press Enter to continue...")
+# print(bfs(start, end))
+# input("Press Enter to continue...")

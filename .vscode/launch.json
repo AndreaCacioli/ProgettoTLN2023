@@ -8,7 +8,7 @@
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
-            "program": "./Parte2-Radicioni/distance.py",
+            "program": "./Parte2-Radicioni/DistanceTester.py",
             "console": "integratedTerminal",
             "justMyCode": true
         }
