@@ -1,8 +1,9 @@
 from nltk.corpus import wordnet
-from Lesk import simplifiedLesk
+
 
 def index(sense1, sense2):
     return 2 * 16 - len(bfs(sense1, sense2))
+
 
 def bfs(start, goal):
     addedBy = {}
@@ -31,14 +32,14 @@ def getPath(addedByDictionary, start, goal):
 
 
 def getNeighbours(sense):
-    neighbours = []
-    neighbours.extend(sense.hyponyms())
-    neighbours.extend(sense.instance_hyponyms())
+    neighbours = sense.hyponyms()
+    #   neighbours.extend(sense.instance_hyponyms())
     neighbours.extend(sense.hypernyms())
     neighbours.extend(sense.instance_hypernyms())
     return neighbours
 
 
+# from Lesk import simplifiedLesk
 # start = simplifiedLesk("thing", "")
 # end = simplifiedLesk("entity", "")
 

@@ -1,4 +1,5 @@
 Word 1,Word 2,Human (mean)
+Jerusalem,Israel,8.46
 love,sex,6.77
 tiger,cat,7.35
 tiger,tiger,10.00
@@ -36,7 +37,6 @@ king,cabbage,0.23
 king,queen,8.58
 king,rook,5.92
 bishop,rabbi,6.69
-Jerusalem,Israel,8.46
 Jerusalem,Palestinian,7.65
 holy,sex,1.62
 fuck,sex,9.44
