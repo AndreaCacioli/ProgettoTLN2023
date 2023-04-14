@@ -12,6 +12,7 @@
 
 from nltk.corpus import wordnet
 
+
 def WuPalmerSimilarity(sense1, sense2):
     return (2 * depth(LCS(sense1, sense2))) / (depth(sense1) + depth(sense2))
 
@@ -28,7 +29,7 @@ def depth(sense):
     while hypernym != root:
         hypernym = hypernym.hypernyms()[0]
         i += 1
-    return i+1
+    return i + 1
 
 
 def LCS(sense1, sense2):
@@ -45,6 +46,7 @@ def expand(toBeExpanded):
         toBeExpanded = toBeExpanded.union(set(sense.hypernyms()))
         toBeExpanded = toBeExpanded.union(set(sense.instance_hypernyms()))
     return toBeExpanded
+
 
 def maxDepth(list):
     maxDepth = 0

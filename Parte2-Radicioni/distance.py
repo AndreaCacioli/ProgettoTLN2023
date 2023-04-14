@@ -3,11 +3,14 @@ import math
 
 MAX_DEPTH = 19
 
+
 def index(sense1, sense2):
     return 2 * MAX_DEPTH - len(bfs(sense1, sense2))
 
+
 def LeacockChodorow(sense1, sense2):
-    return -math.log( len(bfs(sense1, sense2)) / (2 * MAX_DEPTH) )
+    return -math.log(len(bfs(sense1, sense2)) / (2 * MAX_DEPTH))
+
 
 def bfs(start, goal):
     addedBy = {}
@@ -49,7 +52,6 @@ if __name__ == "__main__":
 
     print(depth(maxDepth(wordnet.all_eng_synsets())))
 
-
     start = simplifiedLesk("Jerusalem", "")
     end = simplifiedLesk("Israel", "")
     print(bfs(start, end))
@@ -65,4 +67,3 @@ if __name__ == "__main__":
     start = simplifiedLesk("rust", "")
     end = simplifiedLesk("car", "")
     print(bfs(start, end))
-
