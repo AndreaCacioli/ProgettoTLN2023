@@ -1,9 +1,13 @@
 from nltk.corpus import wordnet
+import math
 
+MAX_DEPTH = 19
 
 def index(sense1, sense2):
-    return 2 * 16 - len(bfs(sense1, sense2))
+    return 2 * MAX_DEPTH - len(bfs(sense1, sense2))
 
+def LeacockChodorow(sense1, sense2):
+    return -math.log( len(bfs(sense1, sense2)) / (2 * MAX_DEPTH) )
 
 def bfs(start, goal):
     addedBy = {}
@@ -33,27 +37,32 @@ def getPath(addedByDictionary, start, goal):
 
 def getNeighbours(sense):
     neighbours = sense.hyponyms()
-    #   neighbours.extend(sense.instance_hyponyms())
+    neighbours.extend(sense.instance_hyponyms())
     neighbours.extend(sense.hypernyms())
     neighbours.extend(sense.instance_hypernyms())
     return neighbours
 
 
-# from Lesk import simplifiedLesk
-# start = simplifiedLesk("thing", "")
-# end = simplifiedLesk("entity", "")
+if __name__ == "__main__":
+    from Lesk import simplifiedLesk
+    from WuPalmer import maxDepth, depth
 
-# print(bfs(start, end))
-# input("Press Enter to continue...")
+    print(depth(maxDepth(wordnet.all_eng_synsets())))
 
-# start = simplifiedLesk("rust", "")
-# end = simplifiedLesk("car", "")
 
-# print(bfs(start, end))
-# input("Press Enter to continue...")
+    start = simplifiedLesk("Jerusalem", "")
+    end = simplifiedLesk("Israel", "")
+    print(bfs(start, end))
 
-# start = simplifiedLesk("program", "")
-# end = simplifiedLesk("Jerusalem", "")
+    start = simplifiedLesk("program", "")
+    end = simplifiedLesk("Jerusalem", "")
+    print(bfs(start, end))
 
-# print(bfs(start, end))
-# input("Press Enter to continue...")
+    start = simplifiedLesk("thing", "")
+    end = simplifiedLesk("entity", "")
+    print(bfs(start, end))
+
+    start = simplifiedLesk("rust", "")
+    end = simplifiedLesk("car", "")
+    print(bfs(start, end))
+
