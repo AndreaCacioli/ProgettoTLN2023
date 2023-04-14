@@ -9,7 +9,7 @@ def simplifiedLesk(word, context):
         definition = synset.definition()
         examples = synset.examples()
         bagOfWords = getBagOfWords(definition, examples)
-        contextSet = set([context])
+        contextSet = set(context)
         if len(contextSet.intersection(bagOfWords)) > maxOverlap:
             bestSense = synset
     if bestSense is None:

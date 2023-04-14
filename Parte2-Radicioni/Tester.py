@@ -16,8 +16,8 @@ def test(f, description, targetFunction=None):
         i += 1
         print(i / len(entries) * 100)
         try:
-            sense1 = simplifiedLesk(entry[0], entry[1])
-            sense2 = simplifiedLesk(entry[1], entry[0])
+            sense1 = simplifiedLesk(entry[0], [entry[1]])
+            sense2 = simplifiedLesk(entry[1], [entry[0]])
         except:
             print(
                 f"Skipping words {entry[0]}, {entry[1]} because they are not considered nouns"

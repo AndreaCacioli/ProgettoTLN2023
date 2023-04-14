@@ -52,18 +52,18 @@ if __name__ == "__main__":
 
     print(depth(maxDepth(wordnet.all_eng_synsets())))
 
-    start = simplifiedLesk("Jerusalem", "")
-    end = simplifiedLesk("Israel", "")
+    start = simplifiedLesk("Jerusalem", [""])
+    end = simplifiedLesk("Israel", [""])
     print(bfs(start, end))
 
-    start = simplifiedLesk("program", "")
-    end = simplifiedLesk("Jerusalem", "")
+    start = simplifiedLesk("program", [""])
+    end = simplifiedLesk("Jerusalem", [""])
     print(bfs(start, end))
 
-    start = simplifiedLesk("thing", "")
-    end = simplifiedLesk("entity", "")
+    start = simplifiedLesk("thing", [""])
+    end = simplifiedLesk("entity", [""])
     print(bfs(start, end))
 
-    start = simplifiedLesk("rust", "")
-    end = simplifiedLesk("car", "")
+    start = simplifiedLesk("rust", [""])
+    end = simplifiedLesk("car", [""])
     print(bfs(start, end))
