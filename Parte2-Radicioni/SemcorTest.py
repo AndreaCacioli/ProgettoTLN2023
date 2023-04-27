@@ -3,21 +3,24 @@ from nltk.corpus import wordnet
 import random
 from Lesk import simplifiedLesk
 
+
 def getSynset(elem):
     lemma = elem.label()
     synset = lemma.synset()
     return synset
 
+
 def getSqueezedString(sentence):
-    string = ''
+    string = ""
     for word in sentence:
         string = string + word
     return string
 
+
 def getTaggedElements(sentence):
     sentence = getSqueezedString(sentence)
     tree = semcor.tagged_chunks(tag="both")
-    leavesString = ''
+    leavesString = ""
     taggedElements = []
     i = 0
     while leavesString != sentence:
@@ -28,14 +31,14 @@ def getTaggedElements(sentence):
         if isEndingElement(elem):
             if leavesString == sentence:
                 return taggedElements
-            leavesString = ''
+            leavesString = ""
             continue
     return None
-        
 
 
 def isEndingElement(elem):
-    return elem.label() is None and elem.leaves()[0] == '.'
+    return elem.label() is None and elem.leaves()[0] == "."
+
 
 # TODO figure out why 23 crashes
 total_tested_sentences = 0
@@ -43,7 +46,7 @@ i = 0
 sents = semcor.sents()
 
 if __name__ == "__main__":
-    while(total_tested_sentences < 50):
+    while total_tested_sentences < 50:
         sentence = sents[i]
         i += 1
         elems = getTaggedElements(sentence)
@@ -58,14 +61,15 @@ if __name__ == "__main__":
                 except:
                     continue
             # We have the synset, let's try disambiguating it with close words
-            span = 3 # 3 words left and 3 words right (when possible)
+            span = 3  # 3 words left and 3 words right (when possible)
             termine = randElement.leaves()[0]
             print(termine)
             print(sentence)
             index = sentence.index(termine)
             print(f"Trovato {termine} index: {index}")
-            context = sentence[max(0, index - span): min(len(sentence)-1, index + span)]
+            context = sentence[
+                max(0, index - span) : min(len(sentence) - 1, index + span)
+            ]
             disambiguation = simplifiedLesk(termine, context)
-            total_tested_sentences +=1
+            total_tested_sentences += 1
             print(f"Succeded: {synset == disambiguation}")
-            
