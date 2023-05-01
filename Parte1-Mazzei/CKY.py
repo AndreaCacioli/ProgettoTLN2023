@@ -19,7 +19,6 @@ def parse(string, grammar):
     table = getSetMatrix(n, n + 1)
 
     for j in range(0, n):
-        connected = False
         word = words[j]
         word = cleanWord(word)
         wordNode = Node(word)
@@ -38,7 +37,6 @@ def parse(string, grammar):
                                 grammar, leftSon.name, rightSon.name
                             )
                             for matchingRule in possibleParents:
-                                connected = True
                                 createAndAddNewNode(
                                     matchingRule, table, i, j, rightSon, leftSon
                                 )
