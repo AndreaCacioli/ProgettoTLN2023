@@ -1,4 +1,4 @@
-from csv import parse
+from myCsvReader import parse
 from Lesk import simplifiedLesk
 from termcolor import colored, cprint
 from nltk.corpus import wordnet

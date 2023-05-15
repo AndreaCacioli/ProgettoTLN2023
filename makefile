@@ -1,3 +1,6 @@
+runRadicioniTrump: format
+	python3 ./Parte2-Radicioni/TrumpLM.py
+
 runRadicioniWSD: format
 	python3 ./Parte2-Radicioni/WordSenseDisambiguation.py
 
