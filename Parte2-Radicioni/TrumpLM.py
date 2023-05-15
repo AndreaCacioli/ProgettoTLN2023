@@ -68,10 +68,10 @@ def get_big_string(tweets):
     return big_string
 
 
-def get_markov_matrix(N = 2):
+def get_markov_matrix(corpus = tweets, N = 2):
     matrix = {}
-    words = get_all_words(tweets)
-    big_string = get_big_string(tweets)
+    words = get_all_words(corpus)
+    big_string = get_big_string(corpus)
     combinations = product(words, repeat = N - 1) 
     size = (len(words) ** (N - 1)) * len(words)
     print(f"Working on a size of {size}")
@@ -118,7 +118,7 @@ if __name__ == "__main__":
     except:
         print(f"Could not open the file, recalculating {N}-grams")
         with open('saved_dictionary.pkl', 'wb') as f:
-            dictionary = get_markov_matrix(N)
+            dictionary = get_markov_matrix(corpus = tweets, N = N)
             pickle.dump(dictionary, f)
 
 
