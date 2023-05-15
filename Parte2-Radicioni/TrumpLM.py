@@ -70,8 +70,8 @@ def get_big_string(tweets):
 
 def get_markov_matrix(corpus = tweets, N = 2):
     matrix = {}
-    words = get_all_words(corpus)
     big_string = get_big_string(corpus)
+    words = get_all_words(corpus)
     combinations = product(words, repeat = N - 1) 
     size = (len(words) ** (N - 1)) * len(words)
     print(f"Working on a size of {size}")
@@ -108,6 +108,11 @@ def count_occurrences(string, words):
 
 def decode(matrix):
     print(matrix)
+
+def print_dictionary(matrix):
+    for key,value in matrix.items():
+        print(key, ':', value)
+        print()
 
 if __name__ == "__main__":
     import pickle 
