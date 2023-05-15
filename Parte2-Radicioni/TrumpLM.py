@@ -2,7 +2,7 @@ import csv
 from itertools import product
 import sys
 
-with open("./Parte2-Radicioni/tweets.csv") as fp:
+with open("./Parte2-Radicioni/tweets.csv" ,encoding='utf8') as fp:
     reader = csv.reader(fp, delimiter=",", quotechar='"')
     next(reader, None)  # skip the headers
     data_read = [row for row in reader]
@@ -114,12 +114,13 @@ if __name__ == "__main__":
     try:
         print("Trying to recover file with markov matrix...")
         with open('saved_dictionary.pkl', 'rb') as f:
-            loaded_dict = pickle.load(f)
+            dictionary = pickle.load(f)
     except:
         print(f"Could not open the file, recalculating {N}-grams")
+        dictionary = get_markov_matrix(corpus = tweets, N = N)
         with open('saved_dictionary.pkl', 'wb') as f:
-            dictionary = get_markov_matrix(corpus = tweets, N = N)
             pickle.dump(dictionary, f)
+    print(dictionary)
 
 
 
