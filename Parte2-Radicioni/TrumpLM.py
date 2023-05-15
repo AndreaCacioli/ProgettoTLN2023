@@ -2,13 +2,6 @@ import csv
 from itertools import product
 import sys
 
-with open("./Parte2-Radicioni/tweets.csv" ,encoding='utf8') as fp:
-    reader = csv.reader(fp, delimiter=",", quotechar='"')
-    next(reader, None)  # skip the headers
-    data_read = [row for row in reader]
-
-tweets = []
-
 def get_string_from_collection(tuple):
     s = ""
     for t in tuple:
@@ -17,10 +10,11 @@ def get_string_from_collection(tuple):
 
 def remove_links(string):
     target = "https://"
+    target2 = "http://"
     words = string.split()
     for i in range(len(words)):
         word = words[i]
-        if word[0:len(target)] == target:
+        if word[0:len(target)] == target or word[0:len(target2)] == target2:
             words[i] = "<link>"
     return get_string_from_collection(words)
 
@@ -38,6 +32,57 @@ def clean(string):
     string = remove_users(string)
     return string
 
+def get_all_words(tweets):
+    words = set()
+    for d in tweets:
+        text = d["text"]
+        words = words.union(set(text.split()))
+    return words
+
+def get_big_string(tweets):
+    ret = ""
+    for dict in tweets:
+        ret = ret + dict["text"] + " "
+    big_string = ret.split()
+    return big_string
+
+
+
+def get_probability(big_string, word, preceded_by):
+    num =  count_occurrences(big_string, preceded_by + " " + word)
+    den =  count_occurrences (big_string, preceded_by)
+    if num == 0 or den == 0:
+        return 0
+    else: 
+        return num / den
+
+def count_occurrences(string, words):
+    workingString = string
+    target = words.split()
+    count = 0
+    for i in range(len(workingString ) - len(target)):
+        subvec = workingString[i:i+len(target)]
+        if subvec == target:
+            count += 1
+    return count
+
+def decode(matrix):
+    print(matrix)
+
+def print_dictionary(matrix):
+    for key,value in matrix.items():
+        print(key, ':{')
+        for innerKey, innerValue in value.items():
+            if(innerValue != 0):
+                print(f"\t{innerKey}:\t {innerValue}", end='')
+        print("}")
+
+with open("./Parte2-Radicioni/tweets.csv" ,encoding='utf8') as fp:
+    reader = csv.reader(fp, delimiter=",", quotechar='"')
+    next(reader, None)  # skip the headers
+    data_read = [row for row in reader]
+
+tweets = []
 for i in range(len(data_read)):
     dictionary = {}
     dictionary["source"] = data_read[i][0]
@@ -53,22 +98,7 @@ for i in range(len(data_read)):
 #N-Grams
 N = 2
 
-def get_all_words(tweets):
-    words = set()
-    for d in tweets:
-        text = d["text"]
-        words = words.union(set(text.split()))
-    return words
-
-def get_big_string(tweets):
-    ret = ""
-    for dict in tweets:
-        ret = ret + dict["text"]
-    big_string = ret.split()
-    return big_string
-
-
-def get_markov_matrix(corpus = tweets, N = 2):
+def get_markov_matrix(corpus = tweets, N = N):
     matrix = {}
     big_string = get_big_string(corpus)
     words = get_all_words(corpus)
@@ -87,33 +117,6 @@ def get_markov_matrix(corpus = tweets, N = 2):
             sys.stdout.flush()
     return matrix
 
-def get_probability(big_string, word, preceded_by):
-    num =  count_occurrences(big_string, preceded_by + " " + word)
-    den =  count_occurrences (big_string, preceded_by)
-    if num == 0 or den == 0:
-        return 0
-    else: 
-        return num / den
-
-def count_occurrences(string, words):
-    workingString = string
-    target = words.split()
-    count = 0
-    for i in range(len(workingString ) - N):
-        subvec = workingString[i:i+N]
-        if subvec == target:
-            count += 1
-    return count
-
-
-def decode(matrix):
-    print(matrix)
-
-def print_dictionary(matrix):
-    for key,value in matrix.items():
-        print(key, ':', value)
-        print()
-
 if __name__ == "__main__":
     import pickle 
     try:
@@ -125,7 +128,8 @@ if __name__ == "__main__":
         dictionary = get_markov_matrix(corpus = tweets, N = N)
         with open('saved_dictionary.pkl', 'wb') as f:
             pickle.dump(dictionary, f)
-    print(dictionary)
+
+    print_dictionary(dictionary)
 
 
 
