@@ -25,6 +25,8 @@ def clean(string):
     string = replace(string, "https://", "<link>")
     string = replace(string, "@", "<user>")
     string = replace(string, ".@", "<user>")
+    string = "<s> " + string
+    string =  string + " </s>"
     return string
 
 
@@ -133,38 +135,31 @@ with open("./Parte2-Radicioni/tweets.csv", encoding="utf8") as fp:
 # N-Grams
 N = 2
 
-
-def get_markov_matrix(corpus=tweets, N=N):
-    matrix = {}
-    big_string = get_big_string(corpus)
-    words = get_all_words(corpus)
-    combinations = product(words, repeat=N - 1)
-    size = (len(words) ** (N - 1)) * len(words)
-    print(f"Working on a size of {size}")
-    i = 0
-    for combo in combinations:
-        combo = get_string_from_collection(combo)
-        matrix[combo] = {}
-        for word in words:
-            prob = get_probability(big_string, word, preceded_by=combo)
-            matrix[combo][word] = prob
-            i += 1
-            print(f"\r{i} / {size}", end="")
-            sys.stdout.flush()
-    return matrix
-
+def get_markov_matrix_fast(corpus, N):
+    model = {}
+    countsN = {}
+    countsN_1 = {}
+    big_string_array = get_big_string(corpus)
+    for i in range(len(big_string_array) - N):
+        Nsubs =  get_string_from_collection(big_string_array[i:i+N])
+        N_1subs = get_string_from_collection(big_string_array[i:i+N - 1])
+        try:
+            countsN[Nsubs] += 1
+        except:
+            countsN[Nsubs] = 1
+        try:
+            countsN_1[N_1subs] += 1
+        except:
+            countsN_1[N_1subs] = 1
+    for bigger, num in countsN.items():
+        smaller = get_string_from_collection(bigger.split()[0:len(bigger.split()) - 1])
+        nth_word = bigger.split()[-1]
+        model[smaller] = {}
+        det = countsN_1[smaller]
+        model[smaller][nth_word] = num / det
+    return model
 
 if __name__ == "__main__":
-    import pickle
-
-    try:
-        print("Trying to recover file with markov matrix...")
-        with open("saved_dictionary.pkl", "rb") as f:
-            dictionary = pickle.load(f)
-    except:
-        print(f"Could not open the file, recalculating {N}-grams")
-        dictionary = get_markov_matrix(corpus=tweets, N=N)
-        with open("saved_dictionary.pkl", "wb") as f:
-            pickle.dump(dictionary, f)
-
-    print_dictionary(dictionary)
+    dictionary = get_markov_matrix_fast(corpus=tweets, N=2)
+    print()
+    print(generate_text(dictionary, words_number = 20, initial_window=["<s>"]))
