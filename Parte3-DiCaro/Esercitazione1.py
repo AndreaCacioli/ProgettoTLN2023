@@ -29,7 +29,12 @@ def get_mean_overlap(definitions):
     count = 0
     for i in range(len(definitions)):
         for j in range(i, len(definitions)):
-            overlap = len(set(definitions[i]).intersection(set(definitions[j])))
+            seti = set(definitions[i])
+            setj = set(definitions[j])
+            overlap = len(seti.intersection(setj))
+            overlap = overlap / min(len(seti), len(setj))
+            #in percentage
+            overlap *= 100
             sum += overlap
             count += 1
     return float(sum / count)
@@ -52,14 +57,14 @@ if __name__ == "__main__":
             add_definition(blurriness_definitions, line[4])
 
     print(
-        f"The average overlap between door definitions is:\t{get_mean_overlap(door_definitions)}"
+        f"The average overlap between door definitions is:\t{get_mean_overlap(door_definitions)}%"
     )
     print(
-        f"The average overlap between ladybug definitions is:\t{get_mean_overlap(ladybug_definitions)}"
+        f"The average overlap between ladybug definitions is:\t{get_mean_overlap(ladybug_definitions)}%"
     )
     print(
-        f"The average overlap between pain definitions is:\t{get_mean_overlap(pain_definitions)}"
+        f"The average overlap between pain definitions is:\t{get_mean_overlap(pain_definitions)}%"
     )
     print(
-        f"The average overlap between blurriness definitions is:\t{get_mean_overlap(blurriness_definitions)}"
+        f"The average overlap between blurriness definitions is:\t{get_mean_overlap(blurriness_definitions)}%"
     )
