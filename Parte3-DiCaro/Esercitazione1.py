@@ -2,8 +2,20 @@
 
 #Task: Calcolare l'overlap lessicale tra le definizioni.
 
-import nltk
 import csv
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+  
+def clean_sentence(example_sent):
+    stop_words = set(stopwords.words('english'))
+    word_tokens = word_tokenize(example_sent)
+    filtered_sentence = [w for w in word_tokens if not w.lower() in stop_words]
+    filtered_sentence = []
+    for w in word_tokens:
+        if w not in stop_words:
+            filtered_sentence.append(w)
+    return filtered_sentence
+
 len_thresh = 5
 
 def add_definition(l, d):
