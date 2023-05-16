@@ -106,6 +106,8 @@ def generate_text(model, words_number, initial_window):
         raise IndexError("The length of the starting sequence is incompatible with the model")
     window = initial_window
     ret = []
+    for item in initial_window:
+        ret.append(item)
     while len(ret) < words_number:
         string = get_string_from_collection(window)
         probability = model[string]
@@ -113,7 +115,7 @@ def generate_text(model, words_number, initial_window):
         if next_word == NO_EVENT:
             ret.append("</s>")
             return ret
-        window.pop()
+        window.pop(0)
         window.append(next_word)
         ret.append(next_word)
     return ret
