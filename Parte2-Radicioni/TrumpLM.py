@@ -1,7 +1,7 @@
 import csv
 from itertools import product
-import sys
 import random
+from termcolor import cprint
 
 
 def get_string_from_collection(tuple):
@@ -26,7 +26,7 @@ def clean(string):
     string = replace(string, "@", "<user>")
     string = replace(string, ".@", "<user>")
     string = "<s> " + string
-    string =  string + " </s>"
+    string = string + " </s>"
     return string
 
 
@@ -66,20 +66,22 @@ def count_occurrences(string, words):
     return count
 
 
-def print_dictionary(matrix):
+def print_model(matrix):
     for key, value in matrix.items():
-        print(key, ":{")
+        cprint(f"{key}", color="red")
         for innerKey, innerValue in value.items():
-            if innerValue != 0:
-                print(f"\t{innerKey}:\t {innerValue}", end="")
-        print("}")
+            cprint(f"{innerKey}:{innerValue}\t", end="", color="green")
+        print()
 
 
 def is_valid_sentence(string):
-    return not ",false," in string and not 'Android' in string
+    return not ",false," in string and not "Android" in string
 
-NO_EVENT = "</NoEvent>" 
-#Given a dictionary of outcomes and their probabilities return a random outcome based on those probabilities
+
+NO_EVENT = "</NoEvent>"
+
+
+# Given a dictionary of outcomes and their probabilities return a random outcome based on those probabilities
 def simulate_random_variable(distribution):
     cumulative = []
     outcomes = []
@@ -94,18 +96,21 @@ def simulate_random_variable(distribution):
             outcomes.append(key)
     if sum == 0:
         return NO_EVENT
-    if sum < GRANULARITY:
+    if sum < GRANULARITY - 0.1 * GRANULARITY:
         raise ValueError("The dictionary must contain a probability distribution")
-    res = random.randint(0,GRANULARITY)
+    res = random.randint(0, GRANULARITY)
     i = 0
     while res > cumulative[i]:
-        i += 1 
+        i += 1
     return outcomes[i]
+
 
 def generate_text(model, words_number, initial_window):
     n = len(list(model.keys())[0].split())
     if len(initial_window) != n:
-        raise IndexError("The length of the starting sequence is incompatible with the model")
+        raise IndexError(
+            "The length of the starting sequence is incompatible with the model"
+        )
     window = initial_window
     ret = []
     for item in initial_window:
@@ -116,12 +121,11 @@ def generate_text(model, words_number, initial_window):
         next_word = simulate_random_variable(probability)
         if next_word == NO_EVENT:
             ret.append("</s>")
-            return ret
+            return get_string_from_collection(ret)
         window.pop(0)
         window.append(next_word)
         ret.append(next_word)
-    return ret
-
+    return get_string_from_collection(ret)
 
 
 tweets = []
@@ -135,14 +139,15 @@ with open("./Parte2-Radicioni/tweets.csv", encoding="utf8") as fp:
 # N-Grams
 N = 2
 
+
 def get_markov_matrix_fast(corpus, N):
     model = {}
     countsN = {}
     countsN_1 = {}
     big_string_array = get_big_string(corpus)
     for i in range(len(big_string_array) - N):
-        Nsubs =  get_string_from_collection(big_string_array[i:i+N])
-        N_1subs = get_string_from_collection(big_string_array[i:i+N - 1])
+        Nsubs = get_string_from_collection(big_string_array[i : i + N])
+        N_1subs = get_string_from_collection(big_string_array[i : i + N - 1])
         try:
             countsN[Nsubs] += 1
         except:
@@ -152,14 +157,21 @@ def get_markov_matrix_fast(corpus, N):
         except:
             countsN_1[N_1subs] = 1
     for bigger, num in countsN.items():
-        smaller = get_string_from_collection(bigger.split()[0:len(bigger.split()) - 1])
+        smaller = get_string_from_collection(
+            bigger.split()[0 : len(bigger.split()) - 1]
+        )
         nth_word = bigger.split()[-1]
-        model[smaller] = {}
         det = countsN_1[smaller]
-        model[smaller][nth_word] = num / det
+        try:
+            model[smaller][nth_word] = num / det
+        except:
+            model[smaller] = {}
+            model[smaller][nth_word] = num / det
+
     return model
 
+
 if __name__ == "__main__":
-    dictionary = get_markov_matrix_fast(corpus=tweets, N=2)
+    dictionary = get_markov_matrix_fast(corpus=tweets, N=3)
     print()
-    print(generate_text(dictionary, words_number = 20, initial_window=["<s>"]))
+    print(generate_text(dictionary, words_number=50, initial_window=["<s>", "I"]))
