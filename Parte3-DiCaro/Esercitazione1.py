@@ -20,6 +20,7 @@ len_thresh = 5
 
 def add_definition(l, d):
     if len(d.split()) > len_thresh:
+        d = clean_sentence(d)
         l.append(d)
     return l
 door_definitions = []
@@ -35,58 +36,18 @@ with open("./Parte3-DiCaro/TLN-definitions-23.tsv") as file:
         add_definition(ladybug_definitions, line[2])
         add_definition(pain_definitions, line[3])
         add_definition(blurriness_definitions, line[4])
-print(ladybug_definitions)
-door_sum = 0
-door_count = 0
-ladybug_sum = 0
-ladybug_count = 0
-pain_sum = 0
-pain_count = 0
-blurriness_sum = 0
-blurriness_count = 0
-d_c = []
-l_c = []
-p_c = []
-b_c = []
 
-for i in range(len(door_definitions)):
-    for j in range (len(door_definitions)):
-        if i != j and (i, j) not in d_c and (j, i) not in d_c:
-            overlap = len(set(door_definitions[i].split()).intersection(set(door_definitions[j])))
-            door_sum += overlap
-            door_count += 1
-            d_c.append((i, j))
-door_mean = float(door_sum/door_count)
+def get_mean_overlap(definitions):
+    sum = 0
+    count = 0
+    for i in range(len(definitions)):
+        for j in range (i, len(definitions)):
+            overlap = len(set(door_definitions[i]).intersection(set(door_definitions[j])))
+            sum += overlap
+            count += 1
+    return float(sum/count)
 
-for i in range(len(ladybug_definitions)):
-    for j in range (len(ladybug_definitions)):
-        if i != j and (i, j) not in l_c and (j, i) not in l_c:
-            overlap = len(set(ladybug_definitions[i].split()).intersection(set(ladybug_definitions[j])))
-            ladybug_sum += overlap
-            ladybug_count += 1
-            l_c.append((i, j))
-
-ladybug_mean = float(ladybug_sum/ladybug_count)
-
-for i in range(len(pain_definitions)):
-    for j in range (len(pain_definitions)):
-        if i != j and (i, j) not in p_c and (j, i) not in p_c:
-            overlap = len(set(pain_definitions[i].split()).intersection(set(pain_definitions[j])))
-            pain_sum += overlap
-            pain_count += 1
-            p_c.append((i, j))
-pain_mean = float(pain_sum/pain_count)
-
-for i in range(len(blurriness_definitions)):
-    for j in range (len(blurriness_definitions)):
-        if i != j and (i, j) not in b_c and (j, i) not in b_c:
-            overlap = len(set(blurriness_definitions[i].split()).intersection(set(blurriness_definitions[j])))
-            blurriness_sum += overlap
-            blurriness_count += 1
-            b_c.append((i, j))
-blurriness_mean = float(blurriness_sum/blurriness_count)
-
-print(door_mean)
-print(ladybug_mean)
-print(pain_mean)
-print(blurriness_mean)
+print(f"The average overlap between door definitions is:\t{get_mean_overlap(door_definitions)}")
+print(f"The average overlap between ladybug definitions is:\t{get_mean_overlap(ladybug_definitions)}")
+print(f"The average overlap between pain definitions is:\t{get_mean_overlap(pain_definitions)}")
+print(f"The average overlap between blurriness definitions is:\t{get_mean_overlap(blurriness_definitions)}")
