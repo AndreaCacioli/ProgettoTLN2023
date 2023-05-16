@@ -1,6 +1,7 @@
 import csv
 from itertools import product
 import sys
+import random
 
 
 def get_string_from_collection(tuple):
@@ -73,7 +74,50 @@ def print_dictionary(matrix):
 
 
 def is_valid_sentence(string):
-    return not ",false," in string
+    return not ",false," in string and not 'Android' in string
+
+NO_EVENT = "</NoEvent>" 
+#Given a dictionary of outcomes and their probabilities return a random outcome based on those probabilities
+def simulate_random_variable(distribution):
+    cumulative = []
+    outcomes = []
+    sum = 0
+    GRANULARITY = 100000
+    for key, value in distribution.items():
+        if value > 1 or sum > GRANULARITY:
+            raise ValueError("The dictionary must contain a probability distribution")
+        if value > 0:
+            sum += value * GRANULARITY
+            cumulative.append(sum)
+            outcomes.append(key)
+    if sum == 0:
+        return NO_EVENT
+    if sum < GRANULARITY:
+        raise ValueError("The dictionary must contain a probability distribution")
+    res = random.randint(0,GRANULARITY)
+    i = 0
+    while res > cumulative[i]:
+        i += 1 
+    return outcomes[i]
+
+def generate_text(model, words_number, initial_window):
+    n = len(list(model.keys())[0].split())
+    if len(initial_window) != n:
+        raise IndexError("The length of the starting sequence is incompatible with the model")
+    window = initial_window
+    ret = []
+    while len(ret) < words_number:
+        string = get_string_from_collection(window)
+        probability = model[string]
+        next_word = simulate_random_variable(probability)
+        if next_word == NO_EVENT:
+            ret.append("</s>")
+            return ret
+        window.pop()
+        window.append(next_word)
+        ret.append(next_word)
+    return ret
+
 
 
 tweets = []
