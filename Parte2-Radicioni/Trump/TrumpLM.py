@@ -135,9 +135,24 @@ with open("./Parte2-Radicioni/Trump/tweets.csv", encoding="utf8") as fp:
         if is_valid_sentence(row["text"]):
             tweets.append(row)
 
-# N-Grams
-N = 2
 
+def get_random_initial_window(corpus, N):
+    prob_distr = {}
+    sum = 0
+    for dic in corpus:
+        text = dic["text"]
+        text = text.split()
+        start = text[0:N - 1]
+        start_string = get_string_from_collection(start)
+        try:
+            prob_distr[start_string] += 1
+        except:
+            prob_distr[start_string] = 1
+        sum += 1
+    for key, value in prob_distr.items():
+        prob_distr[key] = value / sum
+    return simulate_random_variable(prob_distr).split()
+        
 
 def get_markov_matrix_fast(corpus, N):
     model = {}
@@ -171,6 +186,8 @@ def get_markov_matrix_fast(corpus, N):
 
 
 if __name__ == "__main__":
-    dictionary = get_markov_matrix_fast(corpus=tweets, N=3)
+    N = 3
+    dictionary = get_markov_matrix_fast(corpus=tweets, N=N)
     print()
-    print(generate_text(dictionary, words_number=50, initial_window=["<s>", "I"]))
+    window = get_random_initial_window(tweets, N)
+    print(generate_text(dictionary, words_number=50, initial_window=window))
