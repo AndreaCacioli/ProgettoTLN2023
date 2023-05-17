@@ -4,6 +4,9 @@ runRadicioniTrump: format
 runRadicioniWuPalmer: format
 	python3 ./Parte2-Radicioni/WSD/WuPalmerTest.py
 
+runRadicioniSemanticDistance: format
+	python3 ./Parte2-Radicioni/WSD/SimPathTest.py
+
 runRadicioniLeacockChodrow: format
 	python3 ./Parte2-Radicioni/WSD/LeacockChodrowTest.py
 
