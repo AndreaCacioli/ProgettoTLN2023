@@ -1,5 +1,4 @@
 import csv
-from itertools import product
 import random
 from termcolor import cprint
 
