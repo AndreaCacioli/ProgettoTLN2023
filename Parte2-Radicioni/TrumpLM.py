@@ -75,7 +75,7 @@ def print_model(matrix):
 
 
 def is_valid_sentence(string):
-    return not ",false," in string and not "Android" in string
+    return not ",false," in string and not "Android" in string and not "&amp;" in string
 
 
 NO_EVENT = "</NoEvent>"
