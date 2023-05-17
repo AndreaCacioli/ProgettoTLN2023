@@ -5,6 +5,10 @@ def simplifiedLesk(word, context):
     maxOverlap = 0
     bestSense = None
     synsets = wordnet.synsets(word, wordnet.NOUN)
+    if len(synsets) == 1:
+        return synsets[0]
+    if len(synsets) == 0:
+        raise ValueError(f"There is no Noun synset in wordnet for {word}")
     for synset in synsets:
         definition = synset.definition()
         examples = synset.examples()

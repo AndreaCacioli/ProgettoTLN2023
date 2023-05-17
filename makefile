@@ -10,6 +10,9 @@ runRadicioniSemanticDistance: format
 runRadicioniLeacockChodrow: format
 	python3 ./Parte2-Radicioni/WSD/LeacockChodrowTest.py
 
+runRadicioniSemCor: format
+	python3 ./Parte2-Radicioni/WSD/SemCorTest.py
+
 runMazzeiEnglish: format
 	python3 ./Parte1-Mazzei/EnglishGrammar.py 
 
