@@ -128,7 +128,7 @@ def generate_text(model, words_number, initial_window):
 
 
 tweets = []
-with open("./Parte2-Radicioni/tweets.csv", encoding="utf8") as fp:
+with open("./Parte2-Radicioni/Trump/tweets.csv", encoding="utf8") as fp:
     reader = csv.DictReader(fp)
     for row in reader:
         row["text"] = clean(row["text"])

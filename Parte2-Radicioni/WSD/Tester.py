@@ -1,4 +1,4 @@
-from csv import parse
+from myCsvReader import parse
 from scipy import stats
 from Lesk import simplifiedLesk
 from termcolor import cprint
@@ -10,7 +10,7 @@ def test(f, description, targetFunction=None):
     var1 = []
     var2 = []
     exacts = []
-    entries = parse("./Parte2-Radicioni/WordSim353.csv")
+    entries = parse("./Parte2-Radicioni/WSD/WordSim353.csv")
     i = 0
     for entry in entries:
         i += 1

@@ -1,8 +1,11 @@
 runRadicioniTrump: format
-	python3 ./Parte2-Radicioni/TrumpLM.py
+	python3 ./Parte2-Radicioni/Trump/TrumpLM.py
 
-runRadicioniWSD: format
-	python3 ./Parte2-Radicioni/WordSenseDisambiguation.py
+runRadicioniWuPalmer: format
+	python3 ./Parte2-Radicioni/WSD/WuPalmerTest.py
+
+runRadicioniLeacockChodrow: format
+	python3 ./Parte2-Radicioni/WSD/LeacockChodrowTest.py
 
 runMazzeiEnglish: format
 	python3 ./Parte1-Mazzei/EnglishGrammar.py 
@@ -15,5 +18,5 @@ runCaro1: format
 
 format: 
 	clear
-	black ./Parte1-Mazzei/*.py ./Parte2-Radicioni/*.py ./Parte3-DiCaro/*.py
+	black ./Parte1-Mazzei/*.py ./Parte2-Radicioni/Trump/*.py ./Parte2-Radicioni/WSD/*.py ./Parte3-DiCaro/*.py
 

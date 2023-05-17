@@ -55,15 +55,9 @@ if __name__ == "__main__":
     start = simplifiedLesk("Jerusalem", [""])
     end = simplifiedLesk("Israel", [""])
     print(bfs(start, end))
-
-    start = simplifiedLesk("program", [""])
-    end = simplifiedLesk("Jerusalem", [""])
-    print(bfs(start, end))
-
-    start = simplifiedLesk("thing", [""])
-    end = simplifiedLesk("entity", [""])
-    print(bfs(start, end))
+    print()
 
     start = simplifiedLesk("rust", [""])
     end = simplifiedLesk("car", [""])
     print(bfs(start, end))
+    print()

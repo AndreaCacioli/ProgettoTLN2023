@@ -1,9 +1,4 @@
-from TrumpLM import (
-    get_markov_matrix,
-    print_model,
-    generate_text,
-    get_string_from_collection,
-)
+from TrumpLM import get_markov_matrix_fast, generate_text, get_string_from_collection
 
 dataset = []
 
@@ -14,7 +9,7 @@ d1 = {}
 d1["text"] = "<s> Where's the pickled pepper that Peter Piper picked? </s>"
 dataset.append(d1)
 
-matrix = get_markov_matrix(corpus=dataset, N=2)
+matrix = get_markov_matrix_fast(corpus=dataset, N=2)
 string = generate_text(model=matrix, words_number=30, initial_window=["<s>"])
 print()
 print(get_string_from_collection(string))
