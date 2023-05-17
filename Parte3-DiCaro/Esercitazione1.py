@@ -33,7 +33,7 @@ def get_mean_overlap(definitions):
             setj = set(definitions[j])
             overlap = len(seti.intersection(setj))
             overlap = overlap / min(len(seti), len(setj))
-            #in percentage
+            # in percentage
             overlap *= 100
             sum += overlap
             count += 1
