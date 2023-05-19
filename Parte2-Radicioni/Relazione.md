@@ -28,4 +28,3 @@ Utilizzando il dataset che contiene associazioni di parole annotati con la simil
   - Indice di Vicinanza Semantica
   - Indice di Leacock e Chodorow
 - Calcolo dell'indice di correlazione di Pearson e Spearman (scipy)
-
