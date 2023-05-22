@@ -91,8 +91,8 @@ restituisce un valore casuale in $\{a, b, c \}$ con probabilitá descritta nel d
 
 ### Preprocessing
 
-É stato fatto poco pre-processing, in particolare si sono rimossi gli Username ("parole che iniziano con @") e le si é sostituite col token "**user**"
-Lo stesso é stato fatto per i link, sostituendoli col token "**link**"
+É stato fatto poco pre-processing, in particolare si sono rimossi gli Username ("parole che iniziano con @") e le si é sostituite col token ```<user>```
+Lo stesso é stato fatto per i link, sostituendoli col token ```<link>```
 
 ### Utilizzo
 
