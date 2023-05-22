@@ -142,7 +142,7 @@ def get_random_initial_window(corpus, N):
     for dic in corpus:
         text = dic["text"]
         text = text.split()
-        start = text[0:N - 1]
+        start = text[0 : N - 1]
         start_string = get_string_from_collection(start)
         try:
             prob_distr[start_string] += 1
@@ -152,7 +152,7 @@ def get_random_initial_window(corpus, N):
     for key, value in prob_distr.items():
         prob_distr[key] = value / sum
     return simulate_random_variable(prob_distr).split()
-        
+
 
 def get_markov_matrix_fast(corpus, N):
     model = {}

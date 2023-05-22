@@ -31,26 +31,27 @@ Utilizzando il dataset che contiene associazioni di parole annotati con la simil
 
 #### Risultati
 
-```text
-#WuPalmer
-PEARSON CORRELATION
-PearsonRResult(statistic=0.31636166816161415, pvalue=1.5783684150823945e-09)
-SPEARMAN CORRELATION
-SignificanceResult(statistic=0.2788094053525254, pvalue=1.2391525466651858e-07)
+> #WUPALMER
+> Pearson correlation
+> PearsonRResult(statistic=0.31636166816161415, pvalue=1.5783684150823945e-09)
+> Spearman correlation
+> SignificanceResult(statistic=0.2788094053525254, pvalue=1.2391525466651858e-07)
 
-#LeacockChodorow
-PEARSON CORRELATION
-PearsonRResult(statistic=0.2962880264345914, pvalue=1.7576680839565154e-08)
-SPEARMAN CORRELATION
-SignificanceResult(statistic=0.2265823173663636, pvalue=1.978909912962172e-05)
+---
 
+> #LEACOCKCHODOROW
+> Pearson correlation
+> PearsonRResult(statistic=0.2962880264345914, pvalue=1.7576680839565154e-08)
+> Spearman correlation
+> SignificanceResult(statistic=0.2265823173663636, pvalue=1.978909912962172e-05)
 
-#Semantic Distance
-PEARSON CORRELATION
-PearsonRResult(statistic=0.24862051813137037, pvalue=2.6635287435986987e-06)
-SPEARMAN CORRELATION
-SignificanceResult(statistic=0.2265823173663636, pvalue=1.978909912962172e-05)
-```
+---
+
+> #SEMANTIC DISTANCE
+> Pearson correlation
+> PearsonRResult(statistic=0.24862051813137037, pvalue=2.6635287435986987e-06)
+> Spearman correlation
+> SignificanceResult(statistic=0.2265823173663636, pvalue=1.978909912962172e-05)
 
 #### Scelte implementative WSD
 
@@ -86,7 +87,7 @@ simulate_random_variable(probability_distribution)
 
 restituisce un valore casuale in $\{a, b, c \}$ con probabilitá descritta nel dizionario.
 
-- Si utilizzano come delimitatori di frasi i simboli speciali "s" e "/s" tra parentesi angolari.
+- Si utilizzano come delimitatori di frasi i simboli speciali ```<s>``` e ```</s>```.
 
 ### Preprocessing
 
@@ -106,9 +107,6 @@ Si possono specificare:
 
 Ecco alcune frasi generate dal programma con lunghezza uguale a **50 parole** utilizzando **trigrammi**:
 
-```text
+> ```<s> <user> is known as a Connecticut politician bragging that he was a great nominee gas prices and why George Will is a total joke in political circles.  Hence he writes for Loser Salon.  <user> </s> <s> Losers and haterseven you as low and dumb as you are a total```
 
-<s> <user> is known as a Connecticut politician bragging that he was a great nominee gas prices and why George Will is a total joke in political circles.  Hence he writes for Loser Salon.  <user> </s> <s> Losers and haterseven you as low and dumb as you are a total 
-
-<s> Really dumb <user> Begged my people for a ride. $700 million washed down the drain. </s> <s> <user> Danny--You're a total loser who will self-destruct just like corrupt pol Shifty Schiff who fraudulently made up lie)! </s> <s> <user> ignoring haters and losers a very happy Easter! </s> <s>
-```
+> ```<s> Really dumb <user> Begged my people for a ride. $700 million washed down the drain. </s> <s> <user> Danny--You're a total loser who will self-destruct just like corrupt pol Shifty Schiff who fraudulently made up lie)! </s> <s> <user> ignoring haters and losers a very happy Easter! </s>```
