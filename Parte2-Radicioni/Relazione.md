@@ -39,10 +39,17 @@ SPEARMAN CORRELATION
 SignificanceResult(statistic=0.2788094053525254, pvalue=1.2391525466651858e-07)
 
 #LeacockChodorow
+PEARSON CORRELATION
+PearsonRResult(statistic=0.2962880264345914, pvalue=1.7576680839565154e-08)
+SPEARMAN CORRELATION
+SignificanceResult(statistic=0.2265823173663636, pvalue=1.978909912962172e-05)
 
 
 #Semantic Distance
-
+PEARSON CORRELATION
+PearsonRResult(statistic=0.24862051813137037, pvalue=2.6635287435986987e-06)
+SPEARMAN CORRELATION
+SignificanceResult(statistic=0.2265823173663636, pvalue=1.978909912962172e-05)
 ```
 
 #### Scelte implementative WSD
