@@ -107,6 +107,8 @@ Si possono specificare:
 
 Ecco alcune frasi generate dal programma con lunghezza uguale a **50 parole** utilizzando **trigrammi**:
 
-> ```<s> <user> is known as a Connecticut politician bragging that he was a great nominee gas prices and why George Will is a total joke in political circles.  Hence he writes for Loser Salon.  <user> </s> <s> Losers and haterseven you as low and dumb as you are a total```
+>```<s> <user> is known as a Connecticut politician bragging that he was a great nominee gas prices and why George Will is a total joke in political circles.  Hence he writes for Loser Salon.  <user> </s> <s> Losers and haterseven you as low and dumb as you are a total```
 
-> ```<s> Really dumb <user> Begged my people for a ride. $700 million washed down the drain. </s> <s> <user> Danny--You're a total loser who will self-destruct just like corrupt pol Shifty Schiff who fraudulently made up lie)! </s> <s> <user> ignoring haters and losers a very happy Easter! </s>```
+---
+
+>```<s> Really dumb <user> Begged my people for a ride. $700 million washed down the drain. </s> <s> <user> Danny--You're a total loser who will self-destruct just like corrupt pol Shifty Schiff who fraudulently made up lie)! </s> <s> <user> ignoring haters and losers a very happy Easter! </s>```
