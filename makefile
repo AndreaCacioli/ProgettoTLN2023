@@ -22,6 +22,9 @@ runMazzeiKlingon: format
 runCaro1: format
 	python3 ./Parte3-DiCaro/Esercitazione1.py
 
+runCaro2: format
+	python3 ./Parte3-DiCaro/Esercitazione2.py
+
 format: 
 	clear
 	black ./Parte1-Mazzei/*.py ./Parte2-Radicioni/Trump/*.py ./Parte2-Radicioni/WSD/*.py ./Parte3-DiCaro/*.py
