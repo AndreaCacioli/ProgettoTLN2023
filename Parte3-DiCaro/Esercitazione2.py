@@ -12,6 +12,26 @@ import string
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
+def get_specific_synsets(synsets):
+    ret = []
+    for synset, depth in synsets:
+        differentia = expand(synset)
+        ret.extend(differentia)
+    return ret
+    
+
+def expand(synset):
+    hyponims = synset.hyponyms()
+    if len(hyponims) == 0:
+            return [synset]
+    else:
+        senses = []
+        for hyponim in hyponims:
+            for sense in expand(hyponim):
+                senses.append(sense)
+        return senses
+
+
 def depth(sense):
     root = wordnet.synset("entity.n.01")
     if sense == root:
@@ -59,16 +79,69 @@ def get_synsets_synset_with_min_prof(terms, minProf):
                 ret.append((synset, syndepth))
     return ret
 
+def clean(bag):
+    temp = list(bag)
+    for word in temp:
+        if "(" in word or ")" in word:
+            word = word.replace("(", "")
+            word = word.replace(")", "")
+            word = word.strip()
+    bag = set(temp)
 
+def get_bag_of_words_from_synset(synset):
+    definition = synset.definition()
+    examples = synset.examples()
+    bag = set(definition.split())
+    for example in examples:
+        exampleSet = set(example.split())
+        bag = bag.union(exampleSet)
+    clean(bag)
+    return bag
+
+def get_bag_of_words_from_collection(definitions):
+    ret = set([])
+    for definition in definitions:
+        ret = ret.union(set(definition.split()))
+    return ret
+
+def get_score(synset, bag_of_words):
+    s1 = get_bag_of_words_from_synset(synset)
+    return len(s1.intersection(bag_of_words))
+
+def get_scores(synsets, bag_of_words):
+    ret = {}
+    for synset in synsets:
+        score = get_score(synset, bag_of_words)
+        ret[synset] = score
+    return ret
+
+def sort_dictionary_by_value(dictionary):
+    return list({k: v for k, v in sorted(dictionary.items(), key=lambda item: item[1], reverse = True)})
+
+
+def guess_by_definitions(definitions, X = 5, MIN_PROF = 4, SHOW = 10):
+    nouns = get_noun_occurrencies(definitions)
+    sorted_nouns = sort_dictionary_by_value(nouns)
+    genuses = sorted_nouns[:X]
+    genuses_synsets = get_synsets_synset_with_min_prof(genuses, MIN_PROF)
+    differentia = get_specific_synsets(genuses_synsets)
+    bag_of_words = get_bag_of_words_from_collection(definitions)
+    scores = get_scores(differentia, bag_of_words)
+    scores_keys = sort_dictionary_by_value(scores)
+    ret = []
+    for i in range(SHOW):
+        ret.append((scores_keys[i], scores[scores_keys[i]]))
+    return ret
 
 if __name__ == "__main__":
     definitions_path = './Parte3-DiCaro/TLN-definitions-23.tsv'
-    minimum_definition_length = 1
+    minimum_definition_length = 9
     lemmatizer = WordNetLemmatizer()
     door_definitions = []
     ladybug_definitions = []
     pain_definitions = []
     blurriness_definitions = []
+    definitions = [door_definitions, ladybug_definitions, pain_definitions, blurriness_definitions]
 
     with open(definitions_path) as file:
         tsv_file = csv.reader(file, delimiter="\t")
@@ -78,24 +151,10 @@ if __name__ == "__main__":
             filter_definition_by_size(pain_definitions, line[3], minimum_definition_length)
             filter_definition_by_size(blurriness_definitions, line[4], minimum_definition_length)
 
-    door_nouns_frequency = get_noun_occurrencies(door_definitions)
-    ladybug_nouns_frequency = get_noun_occurrencies(ladybug_definitions)
-    pain_nouns_frequency = get_noun_occurrencies(pain_definitions)
-    blurriness_nouns_frequency = get_noun_occurrencies(blurriness_definitions)
+    print("Guessing:\tDoor, ladybug, pain, blurriness")
+    for definition_collection in definitions:
+        for guess in guess_by_definitions(definition_collection):
+            print(guess)
+        print()
 
-    door_genuses = list({k: v for k, v in sorted(door_nouns_frequency.items(), key=lambda item: item[1], reverse = True)})
-    ladybug_genuses = list({k: v for k, v in sorted(ladybug_nouns_frequency.items(), key=lambda item: item[1], reverse = True)})
-    pain_genuses = list({k: v for k, v in sorted(pain_nouns_frequency.items(), key=lambda item: item[1], reverse = True)})
-    blurriness_genuses = list({k: v for k, v in sorted(blurriness_nouns_frequency.items(), key=lambda item: item[1], reverse = True)})
-
-    X = 5 # Il numero dei possibili genus da considerare. Gli X termini piú ricorrenti nelle definizioni
-    door_genuses = door_genuses[:X]
-    ladybug_genuses = ladybug_genuses[:X]
-    pain_genuses = pain_genuses[:X]
-    blurriness_genuses = blurriness_genuses[:X]
-
-    MIN_PROF = 4 # la profonditá minima che deve avere un synset per poter essere considerato, se é meno profondo, ci rallenta troppo la ricerca.
-
-    # Ora posso prendere i synset dei vari genus
-    door_genuses_synsets = get_synsets_synset_with_min_prof(door_genuses, MIN_PROF)
-    print(door_genuses_synsets)
+    
