@@ -1,29 +1,32 @@
 runRadicioniTrump: format
-	python3 ./Parte2-Radicioni/Trump/TrumpLM.py
+	python3.9 ./Parte2-Radicioni/Trump/TrumpLM.py
 
 runRadicioniWuPalmer: format
-	python3 ./Parte2-Radicioni/WSD/WuPalmerTest.py
+	python3.9 ./Parte2-Radicioni/WSD/WuPalmerTest.py
 
 runRadicioniSemanticDistance: format
-	python3 ./Parte2-Radicioni/WSD/SimPathTest.py
+	python3.9 ./Parte2-Radicioni/WSD/SimPathTest.py
 
 runRadicioniLeacockChodrow: format
-	python3 ./Parte2-Radicioni/WSD/LeacockChodrowTest.py
+	python3.9 ./Parte2-Radicioni/WSD/LeacockChodrowTest.py
 
 runRadicioniSemCor: format
-	python3 ./Parte2-Radicioni/WSD/SemCorTest.py
+	python3.9 ./Parte2-Radicioni/WSD/SemCorTest.py
 
 runMazzeiEnglish: format
-	python3 ./Parte1-Mazzei/EnglishGrammar.py 
+	python3.9 ./Parte1-Mazzei/EnglishGrammar.py 
 
 runMazzeiKlingon: format
-	python3 ./Parte1-Mazzei/Klingon.py 
+	python3.9 ./Parte1-Mazzei/Klingon.py 
 
 runCaro1: format
-	python3 ./Parte3-DiCaro/Esercitazione1.py
+	python3.9 ./Parte3-DiCaro/Esercitazione1.py
 
 runCaro2: format
-	python3 ./Parte3-DiCaro/Esercitazione2.py
+	python3.9 ./Parte3-DiCaro/Esercitazione2.py
+
+runCaro3: format
+	python3.9 ./Parte3-DiCaro/Esercitazione3.py
 
 format: 
 	clear
