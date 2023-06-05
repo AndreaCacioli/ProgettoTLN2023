@@ -1,5 +1,6 @@
 import csv
 from nltk.corpus import wordnet
+import spacy
 
 def get_dictionary():
     semantic_types_path = "./Parte3-DiCaro/csi_inventory_semantictypes.tsv"
@@ -17,7 +18,7 @@ def get_dictionary():
     print("Acquired dictionary")
     return dictionary
 
-CORPUS_PATH = "../../wiki_movie_plots_deduped.csv"
+CORPUS_PATH = "./Parte3-DiCaro/wiki_movie_plots_deduped.csv"
 
 if __name__ == "__main__":
     strings = []
@@ -29,4 +30,9 @@ if __name__ == "__main__":
         
     print(len(strings))
     print(strings[0:2])
+    nlp = spacy.load("en_core_web_sm")
+    for s in strings:
+        doc = nlp(s)
+        for token in doc:
+            print(token.text, token.lemma_, token.pos_, token.tag_, token.dep_, token.shape_, token.is_alpha, token.is_stop)
     
