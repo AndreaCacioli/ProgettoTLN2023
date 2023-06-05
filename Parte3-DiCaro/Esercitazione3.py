@@ -72,4 +72,4 @@ if __name__ == "__main__":
             strings.append(line[-1])
 
     sentences = get_sentences(strings, TARGET, TARGET_POS)
-    print(sentences[0:1])
+    print(sentences[0:10])
