@@ -20,6 +20,9 @@ def get_dictionary():
 
 CORPUS_PATH = "./Parte3-DiCaro/wiki_movie_plots_deduped.csv"
 
+def print_token(token):
+    print(token.text, token.lemma_, token.pos_, token.tag_, token.dep_, token.shape_, token.is_alpha, token.is_stop)
+
 if __name__ == "__main__":
     strings = []
     TARGET = 'see'
@@ -28,11 +31,10 @@ if __name__ == "__main__":
         for line in list(csv_file)[1:]:
             strings.append(line[-1])
         
-    print(len(strings))
-    print(strings[0:2])
     nlp = spacy.load("en_core_web_sm")
-    for s in strings:
+    for i,s in enumerate(strings[0:2]):
         doc = nlp(s)
+        print(f"SENTENCE {i}")
         for token in doc:
-            print(token.text, token.lemma_, token.pos_, token.tag_, token.dep_, token.shape_, token.is_alpha, token.is_stop)
-    
+            print_token(token)
+        print("-----------------")
