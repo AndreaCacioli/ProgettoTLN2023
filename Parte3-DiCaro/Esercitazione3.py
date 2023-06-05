@@ -1,7 +1,5 @@
 import csv
 from nltk.corpus import wordnet
-from nltk.corpus import semcor
-from nltk.tree import TreePrettyPrinter
 
 def get_dictionary():
     semantic_types_path = "./Parte3-DiCaro/csi_inventory_semantictypes.tsv"
@@ -19,19 +17,16 @@ def get_dictionary():
     print("Acquired dictionary")
     return dictionary
 
-def filter_by_pos(array, poses):
-    ret = []
-    for item in array:
-        try:
-            if item[0].label() in poses:
-                ret.append(item)
-        except:
-            pass
-    return ret
+CORPUS_PATH = "../../wiki_movie_plots_deduped.csv"
 
 if __name__ == "__main__":
-
-    tagged_sents = semcor.tagged_sents(tag="pos")
-    TARGET = 'run'
-    verbs = filter_by_pos(tagged_sents, ["VB"])
-    dictionary = get_dictionary()
+    strings = []
+    TARGET = 'see'
+    with open(CORPUS_PATH) as file:
+        csv_file = csv.reader(file)
+        for line in list(csv_file)[1:]:
+            strings.append(line[-1])
+        
+    print(len(strings))
+    print(strings[0:2])
+    
