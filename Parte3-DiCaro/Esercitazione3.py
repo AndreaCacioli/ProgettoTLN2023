@@ -62,24 +62,43 @@ def is_pos(token, pos="VERB"):
     return False
 
 
+def get_sub_verb_obj(doc, target_verb):
+    subject_ = ""
+    object_ = ""
+
+    for token in doc:
+        if token.text.lower() == target_verb.lower():
+            verb = token
+            break
+    else:
+        print(f"Target verb '{target_verb}' not found in the sentence.")
+        return subject_, object_
+
+    for child in verb.children:
+        if "subj" in child.dep_:
+            subject_ = child.text
+        if "obj" in child.dep_:
+            object_ = child.text
+
+    return (subject_, verb, object_)
+
+
 if __name__ == "__main__":
     strings = []
     TARGET = "watch"
     TARGET_POS = "VERB"
-    with open(CORPUS_PATH, encoding='utf-8') as file:
+    with open(CORPUS_PATH) as file:
         csv_file = csv.reader(file)
-        for line in list(csv_file)[1:2500]:
+        for line in list(csv_file)[1:5000]:
             strings.append(line[-1])
 
     sentences = get_sentences(strings, TARGET, TARGET_POS)
-    print(len(sentences))
-    for sentence in sentences[:2]:
-        #find the target token
-        target_token = None
-        for token in sentence:
-            if token.text.lower() == TARGET.lower() and token.pos_.upper() == TARGET_POS.upper():
-                target_token = token
-                break
-        print(target_token)
-        print(list(target_token.children))
-
+    tuples = []
+    for sentence in sentences:
+        print(sentence)
+        tuple = get_sub_verb_obj(sentence, TARGET)
+        print(tuple)
+        print()
+        if tuple[0] != "" and tuple[2] != "":
+            tuples.append(tuple)
+    print(tuples)
