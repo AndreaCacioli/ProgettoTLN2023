@@ -15,10 +15,7 @@ def get_dictionary():
             pos = line[0][-1]
             id = int(line[0][3:-1])
             synset = wordnet.synset_from_pos_and_offset(pos, id)
-            try:
-                dictionary[synset] = (line[1], line[2])
-            except:
-                dictionary[synset] = line[1]
+            dictionary[synset] = line[1]
     print("Acquired dictionary")
     return dictionary
 
@@ -140,10 +137,11 @@ if __name__ == "__main__":
         object_synset = get_synset(sentence, tuple[2])
         sub_type = get_type(subject_synset, dictionary)
         obj_type = get_type(object_synset, dictionary)
-        try:
-            semantic_types_counts[(sub_type, obj_type)] += 1
-        except:
-            semantic_types_counts[(sub_type, obj_type)] = 1
+        if "UNKNOWN" not in (sub_type, obj_type):
+            try:
+                semantic_types_counts[(sub_type, obj_type)] += 1
+            except:
+                semantic_types_counts[(sub_type, obj_type)] = 1
     semantic_types_counts = dict(
         sorted(semantic_types_counts.items(), key=lambda item: item[1], reverse=True)
     )
