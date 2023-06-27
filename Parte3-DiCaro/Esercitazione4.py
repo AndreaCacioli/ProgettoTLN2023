@@ -43,10 +43,13 @@ def get_sections_from_comb(words, comb):
 
 def basic_strategy(words, separations):
     size = len(words)
-    combs = list(itertools.combinations(range(size), separations))
+    # Assumption: a text section will be at least 20 words long
+    print(f"\tNumber of words: {size}")
+    print(f"\tSeparations: {separations}")
+    combs = list(itertools.combinations(range(20, size - 20), separations))
     pbar = InitBar("Trying all possible separations")
     best_comb = ()
-    best_score = -99999999
+    best_score = float("-inf")
     for i, comb in enumerate(combs):
         sections = get_sections_from_comb(words, comb)
         score = compute_score(sections)
@@ -78,11 +81,16 @@ def compute_score(sections):
 
 
 PATH = "./Parte3-DiCaro/TextSegmentation-NBA-ArtNoveau-Cream.txt"
+PATH = "./Parte3-DiCaro/TextSegmentation-Electron-Flour-Window-Positivism-Purple.txt"
+PATH = "./Parte3-DiCaro/TextSegmentation-Electron-Flour-Window-Positivism.txt"
 
 if __name__ == "__main__":
+    print("Reading file...")
     sentences, separations = read_file(PATH)
+    print("Preprocessing...")
     words = preprocess(sentences)
     size = len(words)
+    print("Finding best separation...")
     best_comb, best_score = basic_strategy(words, separations)
     print(f"The best separation was found in {best_comb}, with a score of {best_score}")
     sections = get_sections_from_comb(words, best_comb)
