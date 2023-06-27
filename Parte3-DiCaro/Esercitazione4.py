@@ -77,12 +77,19 @@ def compute_score(sections):
             minimum_length_section = section
     min_length = len(minimum_length_section)
     score /= min_length + 1
+
+    # We give a point if the section contains duplicate words
+    for section in sections:
+        for target_word in set(section):
+            for word in section:
+                if word == target_word:
+                    score += 1
     return score
 
 
-PATH = "./Parte3-DiCaro/TextSegmentation-NBA-ArtNoveau-Cream.txt"
 PATH = "./Parte3-DiCaro/TextSegmentation-Electron-Flour-Window-Positivism-Purple.txt"
 PATH = "./Parte3-DiCaro/TextSegmentation-Electron-Flour-Window-Positivism.txt"
+PATH = "./Parte3-DiCaro/TextSegmentation-NBA-ArtNoveau-Cream.txt"
 
 if __name__ == "__main__":
     print("Reading file...")
