@@ -3,6 +3,7 @@
 import spacy
 from nltk.corpus import stopwords
 from nltk.tokenize import RegexpTokenizer
+from progress_bar import InitBar
 import itertools
 
 
@@ -30,15 +31,50 @@ def preprocess(string):
     return ret
 
 
+def get_sections_from_comb(words, comb):
+    sections = []
+    last_indicator = 0
+    for indicator in comb:
+        sections.append(words[last_indicator:indicator])
+        last_indicator = indicator
+    sections.append(words[last_indicator:])
+    return sections
+
+
 def basic_strategy(words, separations):
     size = len(words)
-    list = [0] * size
-    for i in range(separations):
-        list[i] = 1
-    combs = itertools.combinations(list, size)
-    for comb in combs:
-        print(comb)
-    return combs
+    combs = list(itertools.combinations(range(size), separations))
+    pbar = InitBar("Trying all possible separations")
+    best_comb = ()
+    best_score = -99999999
+    for i, comb in enumerate(combs):
+        sections = get_sections_from_comb(words, comb)
+        score = compute_score(sections)
+        if score > best_score:
+            best_score = score
+            best_comb = comb
+        pbar(i / len(combs) * 100)
+    return best_comb, best_score
+
+
+# gives a high score (0) if the sections do not share any words
+# gives a low score (negative number) if the sections do share words
+def compute_score(sections):
+    score = 0
+    for i in range(len(sections)):
+        for j in range(i, len(sections)):
+            section1 = sections[i]
+            section2 = sections[j]
+            overlap = len(set(section1).intersection(set(section2)))
+            score -= overlap
+    # To prevent small sections we divide the score by the size of the smallest one
+    minimum_length_section = sections[0]
+    for section in sections:
+        if len(minimum_length_section) > len(section):
+            minimum_length_section = section
+    min_length = len(minimum_length_section)
+    score /= min_length + 1
+    return score
 
 
 PATH = "./Parte3-DiCaro/TextSegmentation.txt"
@@ -47,5 +83,9 @@ if __name__ == "__main__":
     sentences, separations = read_file(PATH)
     words = preprocess(sentences)
     size = len(words)
-    print(f"Working on a size of {size}")
-    print(basic_strategy(words, separations))
+    best_comb, best_score = basic_strategy(words, separations)
+    print(f"The best separation was found in {best_comb}, with a score of {best_score}")
+    sections = get_sections_from_comb(words, best_comb)
+    for section in sections:
+        print(section)
+        print("---")
