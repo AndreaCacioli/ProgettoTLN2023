@@ -5,6 +5,7 @@ from nltk.corpus import stopwords
 from nltk.tokenize import RegexpTokenizer
 from progress_bar import InitBar
 import itertools
+import random
 
 
 def read_file(path):
@@ -39,6 +40,55 @@ def get_sections_from_comb(words, comb):
         last_indicator = indicator
     sections.append(words[last_indicator:])
     return sections
+
+
+def advanced_strategy(words, separations, iterations):
+    start_iter = iterations
+    size = len(words)
+    comb = []
+    extraction_range = size / separations
+    sum = 0
+    for i in range(separations):
+        outcome = random.randint(0, extraction_range)
+        sum += outcome
+        comb.append(sum)
+
+    scores = []
+    pbar = InitBar("Refining the solution...")
+    while iterations > 0:
+        score = compute_score(get_sections_from_comb(words, comb))
+        scores.append(score)
+        selected_separator = random.randint(0, separations - 1)
+        direction = random.choice(["left", "right"])
+        step = calculate_step(scores)
+        old_comb = comb.copy()
+        if direction == "left":
+            comb[selected_separator] -= step
+        else:
+            comb[selected_separator] += step
+        new_score = compute_score(get_sections_from_comb(words, comb))
+        if new_score < score:
+            comb = old_comb
+        iterations -= 1
+        pbar((start_iter - iterations) / start_iter * 100)
+    return comb, compute_score(get_sections_from_comb(words, comb))
+
+
+def calculate_step(scores):
+    if len(scores) < 5:
+        return 1
+    i = -2
+    count = 0
+    last_score = scores[-1]
+    while True:
+        score = scores[i]
+        if score != scores:
+            break
+        else:
+            i += 1
+            count += 1
+
+    return max(5 * count, 1)
 
 
 def basic_strategy(words, separations):
@@ -98,7 +148,7 @@ if __name__ == "__main__":
     words = preprocess(sentences)
     size = len(words)
     print("Finding best separation...")
-    best_comb, best_score = basic_strategy(words, separations)
+    best_comb, best_score = advanced_strategy(words, separations, 5000)
     print(f"The best separation was found in {best_comb}, with a score of {best_score}")
     sections = get_sections_from_comb(words, best_comb)
     for section in sections:
