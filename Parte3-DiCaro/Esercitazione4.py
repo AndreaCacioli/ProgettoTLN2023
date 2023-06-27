@@ -77,7 +77,7 @@ def compute_score(sections):
     return score
 
 
-PATH = "./Parte3-DiCaro/TextSegmentation.txt"
+PATH = "./Parte3-DiCaro/TextSegmentation-NBA-ArtNoveau-Cream.txt"
 
 if __name__ == "__main__":
     sentences, separations = read_file(PATH)
