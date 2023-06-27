@@ -11,12 +11,19 @@ import random
 def read_file(path):
     separations = 0
     sentences = ""
+    f = True
+    i = 0
     with open(path) as file:
         lines = file.readlines()
         for line in lines:
             if "---" in line:
+                f = True
                 separations += 1
             else:
+                if f:
+                    sentences += f"START{i}>"
+                    i += 1
+                f = False
                 sentences += line
     return sentences, separations
 
@@ -46,7 +53,7 @@ def advanced_strategy(words, separations, iterations):
     start_iter = iterations
     size = len(words)
     comb = []
-    extraction_range = size / separations
+    extraction_range = int(size / separations)
     sum = 0
     for i in range(separations):
         outcome = random.randint(0, extraction_range)
