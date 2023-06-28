@@ -67,6 +67,7 @@ def advanced_strategy(words, separations, iterations):
     # pbar = InitBar("Refining the solution...")
     selected_separator = None
     direction = None
+    rollback_counter = 0
     while iterations > 0:
         score = compute_score(get_sections_from_comb(words, comb))
         if score == float("-inf"):
@@ -87,10 +88,31 @@ def advanced_strategy(words, separations, iterations):
             f"Comb = {comb} \t Separator #{selected_separator} went {direction} Score: {new_score} which is better? {new_score > score}"
         )
         if new_score < score:
+            rollback_counter += 1
             print("Rolling Back...")
             comb = old_comb
             direction = None
             selected_separator = None
+        else:
+            rollback_counter = 0
+            # Generally we have to try each separator twice (one for each direction)
+            # If we tried twice the minimum required amount, we are stuck on a local minimum
+            # So we add a perturbation
+        if rollback_counter > separations * 2 * 2:
+            rollback_counter = 0
+            perturbation_magnitude = 10  # words
+            perturbated_comb = []
+            for indicator in comb:
+                perturbated_comb.append(
+                    random.randint(
+                        indicator - perturbation_magnitude,
+                        indicator + perturbation_magnitude,
+                    )
+                )
+            print(
+                f"Perturbating the comb\t old comb: {comb}, new comb: {perturbated_comb}"
+            )
+            comb = perturbated_comb
 
         iterations -= 1
         # pbar((start_iter - iterations) / start_iter * 100)
@@ -180,7 +202,7 @@ if __name__ == "__main__":
     words = preprocess(sentences)
     size = len(words)
     print("Finding best separation...")
-    best_comb, best_score = advanced_strategy(words, separations, 50)
+    best_comb, best_score = advanced_strategy(words, separations, 500)
     print(f"The best separation was found in {best_comb}, with a score of {best_score}")
     sections = get_sections_from_comb(words, best_comb)
     for section in sections:
