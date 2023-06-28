@@ -49,53 +49,61 @@ def get_sections_from_comb(words, comb):
     return sections
 
 
-def advanced_strategy(words, separations, iterations):
-    start_iter = iterations
+def get_random_comb(words, separations):
     size = len(words)
     comb = []
     extraction_range = int(size / separations)
     sum = 0
-    for i in range(separations):
+    for _ in range(separations):
         outcome = random.randint(0, extraction_range)
         sum += outcome
         comb.append(sum)
+    return comb
 
-    scores = []
-    pbar = InitBar("Refining the solution...")
+
+def advanced_strategy(words, separations, iterations):
+    # start_iter = iterations
+    comb = get_random_comb(words, separations)
+    # pbar = InitBar("Refining the solution...")
+    selected_separator = None
+    direction = None
     while iterations > 0:
         score = compute_score(get_sections_from_comb(words, comb))
-        scores.append(score)
-        selected_separator = random.randint(0, separations - 1)
-        direction = random.choice(["left", "right"])
-        step = calculate_step(scores)
+        if score == float("-inf"):
+            print("Restarting")
+            comb = get_random_comb(words, separations)
+            continue
+
+        if selected_separator == None:
+            selected_separator = random.randint(0, separations - 1)
+        # True as a value for direction represents a LEFTWARD movement
+        if direction == None:
+            direction = random.choice([True, False])
+        step = 1
+
         old_comb = comb.copy()
-        if direction == "left":
-            comb[selected_separator] -= step
-        else:
-            comb[selected_separator] += step
-        new_score = compute_score(get_sections_from_comb(words, comb))
+        comb, new_score = move(comb, selected_separator, direction, step)
+        print(
+            f"Comb = {comb} \t Separator #{selected_separator} went {direction} Score: {new_score} which is better? {new_score > score}"
+        )
         if new_score < score:
+            print("Rolling Back...")
             comb = old_comb
+            direction = None
+            selected_separator = None
+
         iterations -= 1
-        pbar((start_iter - iterations) / start_iter * 100)
+        # pbar((start_iter - iterations) / start_iter * 100)
     return comb, compute_score(get_sections_from_comb(words, comb))
 
 
-def calculate_step(scores):
-    if len(scores) < 5:
-        return 1
-    i = -2
-    count = 0
-    last_score = scores[-1]
-    while True:
-        score = scores[i]
-        if score != scores:
-            break
-        else:
-            i += 1
-            count += 1
-
-    return max(5 * count, 1)
+def move(comb, selected_separator, direction, step):
+    if direction:
+        comb[selected_separator] -= step
+    else:
+        comb[selected_separator] += step
+    new_score = compute_score(get_sections_from_comb(words, comb))
+    return comb, new_score
 
 
 def basic_strategy(words, separations):
@@ -117,30 +125,47 @@ def basic_strategy(words, separations):
     return best_comb, best_score
 
 
-# gives a high score (0) if the sections do not share any words
-# gives a low score (negative number) if the sections do share words
 def compute_score(sections):
+    # No 0-length sections
+    for section in sections:
+        if len(section) == 0:
+            return float("-inf")
     score = 0
     for i in range(len(sections)):
         for j in range(i, len(sections)):
             section1 = sections[i]
             section2 = sections[j]
             overlap = len(set(section1).intersection(set(section2)))
+            # make it a relative error
+            overlap = overlap / len(section1)
+            # give negative feedback
             score -= overlap
-    # To prevent small sections we divide the score by the size of the smallest one
-    minimum_length_section = sections[0]
-    for section in sections:
-        if len(minimum_length_section) > len(section):
-            minimum_length_section = section
-    min_length = len(minimum_length_section)
-    score /= min_length + 1
 
     # We give a point if the section contains duplicate words
     for section in sections:
-        for target_word in set(section):
-            for word in section:
-                if word == target_word:
-                    score += 1
+        counts = {}
+        size = len(section)
+        for word in set(section):
+            for selected_word in section:
+                if selected_word == word:
+                    try:
+                        counts[word] += 1
+                    except:
+                        counts[word] = 1
+        for key, value in counts.items():
+            if value != 1:
+                score += value / size
+
+    # To prevent small sections we give a bad score to divisions that contain small sections
+    minimum_length_section = sections[0]
+    total_length = 0
+    for section in sections:
+        total_length += len(section)
+        if len(minimum_length_section) > len(section):
+            minimum_length_section = section
+    min_length = len(minimum_length_section)
+    if min_length < total_length / (2 * len(sections)):
+        score -= total_length
     return score
 
 
@@ -155,7 +180,7 @@ if __name__ == "__main__":
     words = preprocess(sentences)
     size = len(words)
     print("Finding best separation...")
-    best_comb, best_score = advanced_strategy(words, separations, 5000)
+    best_comb, best_score = advanced_strategy(words, separations, 50)
     print(f"The best separation was found in {best_comb}, with a score of {best_score}")
     sections = get_sections_from_comb(words, best_comb)
     for section in sections:
