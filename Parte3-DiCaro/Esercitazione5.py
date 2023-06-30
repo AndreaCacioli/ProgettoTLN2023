@@ -55,7 +55,7 @@ if __name__ == "__main__":
     dictionary = corpora.Dictionary(texts)
     pbar = InitBar("Calculating the term-document matrix")
     corpus = []
-    for text, i in enumerate(texts):
+    for i, text in enumerate(texts):
         corpus.append(dictionary.doc2bow(text))
         pbar(i / len(texts) * 100)
 
