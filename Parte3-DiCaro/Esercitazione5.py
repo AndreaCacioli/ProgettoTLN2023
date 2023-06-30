@@ -5,6 +5,11 @@ from nltk.corpus import stopwords
 import pandas
 from nltk.tokenize import RegexpTokenizer
 from nltk.stem.wordnet import WordNetLemmatizer
+from gensim import corpora
+import gensim
+import pyLDAvis.gensim
+import pyLDAvis
+from progress_bar import InitBar
 
 
 def preprocess(data):
@@ -44,6 +49,22 @@ if __name__ == "__main__":
     PATH = "./Parte3-DiCaro/games.csv"
     df = pandas.read_csv(PATH)
     texts = df.loc[:, "About the game"].tolist()
-    texts = preprocess(texts[:100])
+    print("Preprocessing...")
+    texts = preprocess(texts)
+    print("Calculating the dictionary...")
+    dictionary = corpora.Dictionary(texts)
+    pbar = InitBar("Calculating the term-document matrix")
+    corpus = []
+    for text, i in enumerate(texts):
+        corpus.append(dictionary.doc2bow(text))
+        pbar(i / len(texts) * 100)
+
     for i in range(20):
         print(texts[i][:10])
+        print(corpus[i][:10])
+    print("calculating the model...")
+    model = gensim.models.ldamodel.LdaModel(
+        corpus, num_topics=15, id2word=dictionary, passes=20
+    )
+    vis = pyLDAvis.gensim.prepare(model, corpus, dictionary)
+    pyLDAvis.save_html(vis, "out.html")
