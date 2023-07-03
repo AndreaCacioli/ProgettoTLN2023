@@ -16,7 +16,21 @@ def read_json_file(path):
     lines = file.readlines()
     string = "".join(lines)
     data = json.loads(string)
-    return data
+    synsets_strings = data["dataset"]
+    answers = data["answers"]
+    time_diffs = data["timeDiffs"]
+    synsets = []
+    for synset_string in synsets_strings:
+        s = synset_string.split("(")
+        s = s[1].split(")")[0]
+        s = s[1 : len(s) - 1]
+        synset = wn.synset(s)
+        print(synset)
+        synsets.append(synset)
+    ret = []
+    for i in range(len(synsets)):
+        ret.append((synsets[i], answers[i], time_diffs[i]))
+    return ret
 
 
 def read_bed_time_stories(directory):
@@ -42,6 +56,14 @@ def get_senses(stories):
     return ret
 
 
+def get_abstracts_preprocessed(path):
+    abstracts_strings = pandas.read_csv(path)
+    abstracts = abstracts_strings.loc[:, "ABSTRACT"].tolist()
+    abstracts = abstracts[:500]
+    abstracts_preprocessed = preprocess(abstracts)
+    return abstracts_preprocessed
+
+
 def get_basicness_score(synsets):
     """
     A simple function that returns a score in the interval [0:1] proportional to the basicness of a synset.
@@ -54,26 +76,13 @@ def get_basicness_score(synsets):
     BEDTIME_DIR = "./Parte3-DiCaro/Bed Time Stories"
     RESEARCH_ABSTRACTS_PATH = "./Parte3-DiCaro/Abstracts/ResearchAbstracts.csv"
 
-    data = read_json_file(PATH)
-    synsets_strings = data["dataset"]
-    answers = data["answers"]
-    time_diffs = data["timeDiffs"]
-    synsets = []
-    for synset_string in synsets_strings:
-        s = synset_string.split('(')
-        s = s[1].split(')')[0]
-        s = s[1:len(s) -1]
-        synset = wn.synset(s)
-        print(synset)
-        synsets.append(synset)
+    synsets_with_judgement = read_json_file(PATH)
+    print(synsets_with_judgement)
 
     stories_preprocessed = read_bed_time_stories(BEDTIME_DIR)
     basic_senses = get_senses(stories_preprocessed)
 
-    abstracts_strings = pandas.read_csv(RESEARCH_ABSTRACTS_PATH)
-    abstracts = abstracts_strings.loc[:, "ABSTRACT"].tolist()
-    abstracts = abstracts[:500]
-    abstracts_preprocessed = preprocess(abstracts)
+    abstracts_preprocessed = get_abstracts_preprocessed(RESEARCH_ABSTRACTS_PATH)
     abstracts_senses = get_senses(abstracts_preprocessed)
 
     return 1
