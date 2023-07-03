@@ -7,6 +7,7 @@ import json
 import os
 from Esercitazione5 import preprocess
 from nltk.wsd import lesk
+import pandas
 
 
 def read_json_file(path):
@@ -24,11 +25,7 @@ def read_bed_time_stories(directory):
         file = open(directory + "/" + path)
         lines = file.readlines()
         stories_strings.append("".join(lines))
-
-    stories_preprocessed = []
-    for story in stories_strings:
-        story_preprocessed = preprocess([story])
-        stories_preprocessed.append(story_preprocessed[0])
+    stories_preprocessed = preprocess(stories_strings)
     return stories_preprocessed
 
 
@@ -37,15 +34,19 @@ def get_senses(stories):
     for story in stories:
         senses = []
         for term in story:
-            sense = lesk(story, term)
-            senses.append(sense)
+            sense = lesk(story, term, pos="n")
+            if sense is not None:
+                senses.append(sense)
         ret.append(senses)
     return ret
+
 
 if __name__ == "__main__":
     print("Collecting Data from the json dataset...")
     PATH = "./Parte3-DiCaro/BasicAdvanced.json"
     BEDTIME_DIR = "./Parte3-DiCaro/Bed Time Stories"
+    RESEARCH_ABSTRACTS_PATH = "./Parte3-DiCaro/Abstracts/ResearchAbstracts.csv"
+
     data = read_json_file(PATH)
     synsets_strings = data["dataset"]
     answers = data["answers"]
@@ -54,9 +55,21 @@ if __name__ == "__main__":
         print(synsets_strings[i])
         print(answers[i])
         print(time_diffs[i])
-    preprocessed_stories = read_bed_time_stories(BEDTIME_DIR)
+
+    print()
+    stories_preprocessed = read_bed_time_stories(BEDTIME_DIR)
+    basic_senses = get_senses(stories_preprocessed)
     for i in range(3):
-        print(preprocessed_stories[i][:20])
-    basic_senses = get_senses(preprocessed_stories)
+        print(stories_preprocessed[i][:20])
     for i in range(3):
         print(basic_senses[i][:10])
+
+    print()
+    abstracts_strings = pandas.read_csv(RESEARCH_ABSTRACTS_PATH)
+    abstracts = abstracts_strings.loc[:, "ABSTRACT"].tolist()
+    abstracts_preprocessed = preprocess(abstracts)
+    abstracts_senses = get_senses(abstracts_preprocessed)
+    for i in range(3):
+        print(abstracts_preprocessed[i][:20])
+    for i in range(3):
+        print(abstracts_senses[i][:10])
