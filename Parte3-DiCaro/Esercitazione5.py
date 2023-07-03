@@ -64,7 +64,7 @@ if __name__ == "__main__":
         print(corpus[i][:10])
     print("calculating the model...")
     model = gensim.models.ldamodel.LdaModel(
-        corpus, num_topics=15, id2word=dictionary, passes=20
+        corpus, num_topics=7, id2word=dictionary, passes=20
     )
     vis = pyLDAvis.gensim.prepare(model, corpus, dictionary)
     pyLDAvis.save_html(vis, "out.html")

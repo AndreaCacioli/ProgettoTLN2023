@@ -34,6 +34,9 @@ runCaro4: format
 runCaro5: format
 	python3.9 ./Parte3-DiCaro/Esercitazione5.py
 
+runCaro6: format
+	python3.9 ./Parte3-DiCaro/Esercitazione6.py
+
 format: 
 	clear
 	black ./Parte1-Mazzei/*.py ./Parte2-Radicioni/Trump/*.py ./Parte2-Radicioni/WSD/*.py ./Parte3-DiCaro/*.py
