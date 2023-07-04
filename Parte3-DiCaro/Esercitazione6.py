@@ -166,6 +166,18 @@ if __name__ == "__main__":
     synsets.append(wn.synset("weeder.n.01"))
     synsets.append(wn.synset("glow.n.05"))
     synsets.append(wn.synset("word.n.01"))
+    synsets.append(wn.synset("bird.n.01"))
+    synsets.append(wn.synset("wall.n.02"))
+    synsets.append(wn.synset("atrocity.n.01"))
+    synsets.append(wn.synset("largeness.n.01"))
+    synsets.append(wn.synset("tree.n.01"))
+    synsets.append(wn.synset("tree.n.02"))
+    synsets.append(wn.synset("catamaran.n.01"))
+    synsets.append(wn.synset("cooker.n.01"))
+    synsets.append(wn.synset("fan.n.01"))  # Device for moving air
+    synsets.append(wn.synset("fan.n.02"))  # Devout sport team lover
+    synsets.append(wn.synset("elk.n.01"))
+    synsets.append(wn.synset("growth.n.01"))
     scores = get_basicness_score(synsets)
     for synset, score in zip(synsets, scores):
-        print(f"The synset: {synset} has a score of: {score}")
+        print(f"The synset: {synset} | {synset.definition()}\nhas a score of: {score}")
