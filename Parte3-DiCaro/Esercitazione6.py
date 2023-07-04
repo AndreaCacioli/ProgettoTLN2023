@@ -62,8 +62,8 @@ def get_senses(stories):
 def get_abstracts_preprocessed(path):
     abstracts_strings = pandas.read_csv(path)
     abstracts = abstracts_strings.loc[:, "ABSTRACT"].tolist()
-    #Use this to reduce computation time
-    #abstracts = abstracts[:500]
+    # Use this to reduce computation time
+    # abstracts = abstracts[:500]
     abstracts_preprocessed = preprocess(abstracts)
     return abstracts_preprocessed
 
