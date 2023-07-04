@@ -147,6 +147,7 @@ def distance_score(synset, basic_senses_set, advanced_senses_set):
         >= len(current_set.intersection(advanced_senses_set))
         else 0
     )
+    i += 1
     final_score = starting_score / i if starting_score == 1 else 1 - (1 / i)
     return final_score
 
